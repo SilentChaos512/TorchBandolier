@@ -1,0 +1,12 @@
+[
+{
+  "modid": "torchbandolier",
+  "name": "Torch Bandolier",
+  "description": "So many torches!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "TODO",
+  "authors": [ "SilentChaos512" ],
+  "credits": ""
+}
+]
