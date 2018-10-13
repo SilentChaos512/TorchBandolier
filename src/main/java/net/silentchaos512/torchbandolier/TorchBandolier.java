@@ -1,7 +1,7 @@
 package net.silentchaos512.torchbandolier;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -13,21 +13,23 @@ import net.silentchaos512.lib.proxy.IProxy;
 import net.silentchaos512.lib.registry.SRegistry;
 import net.silentchaos512.lib.util.I18nHelper;
 import net.silentchaos512.lib.util.LogHelper;
+import net.silentchaos512.torchbandolier.init.ModItems;
 
 @Mod(modid = TorchBandolier.MOD_ID, name = TorchBandolier.MOD_NAME, version = TorchBandolier.VERSION, dependencies = TorchBandolier.DEPENDENCIES)
+@MethodsReturnNonnullByDefault
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class TorchBandolier implements IModBase {
     public static final String MOD_ID = "torchbandolier";
     public static final String MOD_NAME = "Torch Bandolier";
-    public static final String VERSION = "0.1.0";
-    public static final String VERSION_SILENTLIB = "2.3.12";
+    public static final String VERSION = "0.1.1";
+    public static final String VERSION_SILENTLIB = "3.0.0";
     public static final int BUILD_NUM = 0;
     public static final String DEPENDENCIES = "required-after:silentlib@[" + VERSION_SILENTLIB + ",)";
 
     public static final LogHelper log = new LogHelper(MOD_NAME, BUILD_NUM);
     public static final I18nHelper i18n = new I18nHelper(MOD_ID, log, true);
-    public static final SRegistry registry = new SRegistry(MOD_ID, log);
-    // TODO: tab icon
-    public static final CreativeTabs creativeTab = registry.makeCreativeTab(MOD_ID, () -> new ItemStack(Items.SLIME_BALL));
+    public static final SRegistry registry = new SRegistry();
+    public static final CreativeTabs creativeTab = registry.makeCreativeTab(MOD_ID, () -> new ItemStack(ModItems.torchBandolier));
 
     @Mod.Instance(MOD_ID)
     public static TorchBandolier instance;

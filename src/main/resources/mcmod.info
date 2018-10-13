@@ -5,7 +5,7 @@
   "description": "So many torches!",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "TODO",
+  "url": "https://minecraft.curseforge.com/projects/torch-bandolier",
   "authors": [ "SilentChaos512" ],
   "credits": ""
 }

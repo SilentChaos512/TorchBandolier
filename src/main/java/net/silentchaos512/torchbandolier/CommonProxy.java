@@ -31,7 +31,7 @@ public class CommonProxy implements IProxy {
     @Override
     public void preInit(SRegistry registry, FMLPreInitializationEvent event) {
         registry.setMod(TorchBandolier.instance);
-        registry.addRegistrationHandler(new ModItems(), Item.class);
+        registry.addRegistrationHandler(ModItems::registerAll, Item.class);
         registry.preInit(event);
     }
 

@@ -18,14 +18,13 @@
 
 package net.silentchaos512.torchbandolier.init;
 
-import net.minecraft.item.Item;
-import net.silentchaos512.lib.registry.IRegistrationHandler;
 import net.silentchaos512.lib.registry.SRegistry;
 import net.silentchaos512.torchbandolier.item.ItemTorchBandolier;
 
-public class ModItems implements IRegistrationHandler<Item> {
-    @Override
-    public void registerAll(SRegistry reg) {
-        reg.registerItem(new ItemTorchBandolier(), "torch_bandolier");
+public class ModItems {
+    public static final ItemTorchBandolier torchBandolier = new ItemTorchBandolier();
+
+    public static void registerAll(SRegistry reg) {
+        reg.registerItem(torchBandolier, "torch_bandolier");
     }
 }

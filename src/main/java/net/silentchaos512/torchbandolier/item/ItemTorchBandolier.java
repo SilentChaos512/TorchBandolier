@@ -18,6 +18,7 @@
 
 package net.silentchaos512.torchbandolier.item;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -32,16 +33,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.silentchaos512.lib.item.IItemSL;
+import net.silentchaos512.lib.item.ILeftClickItem;
 import net.silentchaos512.lib.util.EntityHelper;
 import net.silentchaos512.lib.util.ItemHelper;
 import net.silentchaos512.lib.util.PlayerHelper;
 import net.silentchaos512.torchbandolier.TorchBandolier;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-public class ItemTorchBandolier extends Item implements IItemSL {
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class ItemTorchBandolier extends Item implements ILeftClickItem {
     private static final String NBT_ROOT = "TorchBandolier";
     private static final String NBT_AUTO_FILL = "AutoFill";
     private static final String NBT_COUNT = "Count";
