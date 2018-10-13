@@ -25,6 +25,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.silentchaos512.lib.proxy.IProxy;
 import net.silentchaos512.lib.registry.SRegistry;
+import net.silentchaos512.torchbandolier.config.Config;
 import net.silentchaos512.torchbandolier.init.ModItems;
 
 public class CommonProxy implements IProxy {
@@ -32,6 +33,7 @@ public class CommonProxy implements IProxy {
     public void preInit(SRegistry registry, FMLPreInitializationEvent event) {
         registry.setMod(TorchBandolier.instance);
         registry.addRegistrationHandler(ModItems::registerAll, Item.class);
+        registry.addPhasedInitializer(Config.INSTANCE);
         registry.preInit(event);
     }
 

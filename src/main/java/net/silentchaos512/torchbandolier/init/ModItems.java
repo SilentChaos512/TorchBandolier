@@ -21,10 +21,12 @@ package net.silentchaos512.torchbandolier.init;
 import net.silentchaos512.lib.registry.SRegistry;
 import net.silentchaos512.torchbandolier.item.ItemTorchBandolier;
 
-public class ModItems {
-    public static final ItemTorchBandolier torchBandolier = new ItemTorchBandolier();
+public final class ModItems {
+    public static ItemTorchBandolier torchBandolier;
+
+    private ModItems() {}
 
     public static void registerAll(SRegistry reg) {
-        reg.registerItem(torchBandolier, "torch_bandolier");
+        torchBandolier = reg.registerItem(new ItemTorchBandolier(), "torch_bandolier");
     }
 }
