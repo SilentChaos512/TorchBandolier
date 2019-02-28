@@ -18,7 +18,11 @@
 
 package net.silentchaos512.torchbandolier.init;
 
-import net.silentchaos512.lib.registry.SRegistry;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.silentchaos512.torchbandolier.TorchBandolier;
 import net.silentchaos512.torchbandolier.item.ItemTorchBandolier;
 
 public final class ModItems {
@@ -26,7 +30,16 @@ public final class ModItems {
 
     private ModItems() {}
 
-    public static void registerAll(SRegistry reg) {
-        torchBandolier = reg.registerItem(new ItemTorchBandolier(), "torch_bandolier");
+    public static void registerAll(RegistryEvent.Register<Item> event) {
+        if (!event.getName().equals(ForgeRegistries.ITEMS.getRegistryName())) return;
+
+        torchBandolier = new ItemTorchBandolier();
+        register("torch_bandolier", torchBandolier);
+    }
+
+    private static void register(String name, Item item) {
+        ResourceLocation id = new ResourceLocation(TorchBandolier.MOD_ID, name);
+        item.setRegistryName(id);
+        ForgeRegistries.ITEMS.register(item);
     }
 }

@@ -1,0 +1,22 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "/o/",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:leather"
+    },
+    "/": {
+      "tag": "forge:rods/wooden"
+    },
+    "o": {
+      "tag": "forge:gems/diamond"
+    }
+  },
+  "result": {
+    "item": "torchbandolier:torch_bandolier"
+  }
+}

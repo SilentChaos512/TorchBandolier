@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="[25,)"
+issueTrackerURL="https://github.com/SilentChaos512/TorchBandolier/issues"
+displayURL="https://minecraft.curseforge.com/projects/torch-bandolier"
+logoFile="logo.png"
+#credits="Thanks for this example mod goes to Java"
+authors="SilentChaos512"
+
+[[mods]]
+    modId="torchbandolier"
+    version="${file.jarVersion}"
+    displayName="Torch Bandolier"
+    #updateJSONURL="http://myurl.me/"
+    description='''
+    Adds an item which stores many torches.
+    '''
+
+[[dependencies.silentgear]]
+    modId="forge"
+    mandatory=true
+    versionRange="[25,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.silentgear]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.13.2]"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.silentgear]]
+    modId="silentlib"
+    mandatory=true
+    versionRange="[4,)"
+    ordering="NONE"
+    side="BOTH"

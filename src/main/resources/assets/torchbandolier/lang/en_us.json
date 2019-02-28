@@ -1,0 +1,8 @@
+{
+  "item.torchbandolier.torch_bandolier": "Torch Bandolier",
+  "item.torchbandolier.torch_bandolier.autoFill.off": "Auto-Fill: §cOff",
+  "item.torchbandolier.torch_bandolier.autoFill.on": "Auto-Fill: §aOn",
+  "item.torchbandolier.torch_bandolier.blockPlaced": "Places: %s",
+  "item.torchbandolier.torch_bandolier.count": "§e%d / %d",
+  "item.torchbandolier.torch_bandolier.empty": "Empty"
+}

@@ -18,47 +18,31 @@
 
 package net.silentchaos512.torchbandolier.config;
 
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.common.config.Configuration;
-import net.silentchaos512.lib.config.ConfigBaseNew;
-import net.silentchaos512.lib.config.ConfigOption;
-import net.silentchaos512.lib.event.Greetings;
-import net.silentchaos512.lib.util.I18nHelper;
-import net.silentchaos512.lib.util.LogHelper;
-import net.silentchaos512.torchbandolier.TorchBandolier;
+import net.minecraftforge.fml.loading.FMLPaths;
+import net.silentchaos512.utils.config.ConfigSpecWrapper;
+import net.silentchaos512.utils.config.IntValue;
 
-public final class Config extends ConfigBaseNew {
-    public static final Config INSTANCE = new Config();
+public final class Config {
+    private static final ConfigSpecWrapper WRAPPER = ConfigSpecWrapper.create(
+            FMLPaths.CONFIGDIR.get().resolve("torchbandolier-common.toml"));
 
-    @ConfigOption(name = "Max Torch Count", category = Configuration.CATEGORY_GENERAL)
-    @ConfigOption.RangeInt(value = 1024, min = 0)
-    @ConfigOption.Comment("The number of torches a torch bandolier can carry.")
-    public static int maxTorchCount;
+    public static final General GENERAL = new General(WRAPPER);
 
-    private Config() {
-        super(TorchBandolier.MOD_ID);
-    }
+    public static class General {
+        public final IntValue maxTorchCount;
 
-    @Override
-    public void load() {
-        try {
-            super.load();
-        } catch (Exception ex) {
-            TorchBandolier.log.fatal("Could not load configuration file!");
-            Greetings.addMessage(player -> new TextComponentString(TextFormatting.RED + "[Torch Bandolier] Could not" +
-                    " load configuration file! The mod may not work correctly. See log for details"));
-            TorchBandolier.log.catching(ex);
+        General(ConfigSpecWrapper wrapper) {
+            maxTorchCount = wrapper
+                    .builder("general.maxTorchCount")
+                    .comment("The number of torches a torch bandolier can store")
+                    .defineInRange(1024, 0, Integer.MAX_VALUE);
         }
     }
 
-    @Override
-    public I18nHelper i18n() {
-        return TorchBandolier.i18n;
-    }
+    private Config() {}
 
-    @Override
-    public LogHelper log() {
-        return TorchBandolier.log;
+    public static void init() {
+        WRAPPER.validate();
+        WRAPPER.validate();
     }
 }
