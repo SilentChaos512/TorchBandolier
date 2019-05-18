@@ -15,21 +15,27 @@ authors="SilentChaos512"
     Adds an item which stores many torches.
     '''
 
-[[dependencies.silentgear]]
+[[dependencies.torchbandolier]]
     modId="forge"
     mandatory=true
     versionRange="[25,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.silentgear]]
+[[dependencies.torchbandolier]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.13.2]"
     ordering="NONE"
     side="BOTH"
-[[dependencies.silentgear]]
+[[dependencies.torchbandolier]]
     modId="silentlib"
     mandatory=true
     versionRange="[4,)"
     ordering="NONE"
+    side="BOTH"
+[[dependencies.torchbandolier]]
+    modId="silentgear"
+    mandatory=false
+    versionRange="[1,)"
+    ordering="AFTER"
     side="BOTH"

@@ -7,7 +7,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.silentchaos512.torchbandolier.config.Config;
 import net.silentchaos512.torchbandolier.init.ModItems;
-import net.silentchaos512.torchbandolier.util.GenRecipes;
+import net.silentchaos512.torchbandolier.init.ModRecipes;
 
 class SideProxy {
     SideProxy() {
@@ -21,12 +21,10 @@ class SideProxy {
         MinecraftForge.EVENT_BUS.addListener(this::serverStarted);
 
         Config.init();
+        ModRecipes.init();
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        if (TorchBandolier.isDevBuild() && TorchBandolier.RUN_GENERATORS) {
-            GenRecipes.generateAll();
-        }
     }
 
     private void imcEnqueue(InterModEnqueueEvent event) { }

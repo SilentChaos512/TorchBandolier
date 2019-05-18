@@ -76,6 +76,17 @@ minecraft {
 repositories {
     jcenter()
     mavenLocal()
+    maven { // JEI
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven { // JEI mirron
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+    maven {
+        url 'https://jitpack.io'
+    }
 }
 
 configurations {
@@ -86,8 +97,15 @@ configurations {
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
-    extraLibs "com.udojava:EvalEx:2.1"
     compile "net.silentchaos512:silent-lib:${project.sl_version}"
+
+//    compileOnly deobf("mezz.jei:jei-${mc_version}:${project.jei_version}:api")
+//    runtimeOnly deobf("mezz.jei:jei-${mc_version}:${project.jei_version}")
+    compile 'com.github.mezz:JustEnoughItems:1.13-SNAPSHOT'
+
+    runtimeOnly('net.silentchaos512:silent-gear:1.+') {
+        exclude module: 'RoughlyEnoughItems'
+    }
 
     configurations.implementation.extendsFrom(configurations.extraLibs)
 }

@@ -1,0 +1,8 @@
+{
+    "replace": false,
+    "values": [
+        "torchbandolier:empty_torch_bandolier",
+        "torchbandolier:stone_torch_bandolier",
+        "torchbandolier:torch_bandolier"
+    ]
+}

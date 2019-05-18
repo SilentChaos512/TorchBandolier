@@ -2,6 +2,7 @@ package net.silentchaos512.torchbandolier;
 
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
@@ -17,8 +18,7 @@ import java.util.Optional;
 public class TorchBandolier {
     public static final String MOD_ID = "torchbandolier";
     public static final String MOD_NAME = "Torch Bandolier";
-    public static final String VERSION = "1.0.0";
-    public static final boolean RUN_GENERATORS = false;
+    public static final String VERSION = "1.1.0";
 
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
@@ -27,18 +27,31 @@ public class TorchBandolier {
 
     public TorchBandolier() {
         INSTANCE = this;
+        //noinspection Convert2MethodRef
         PROXY = DistExecutor.runForDist(() -> () -> new SideProxy.Client(), () -> () -> new SideProxy.Server());
     }
 
     public static String getVersion() {
-        Optional<? extends ModContainer> o = ModList.get().getModContainerById(TorchBandolier.MOD_ID);
-        if (o.isPresent()) return o.get().getModInfo().getVersion().toString();
+        return getVersion(false);
+    }
+
+    public static String getVersion(boolean correctInDev) {
+        Optional<? extends ModContainer> o = ModList.get().getModContainerById(MOD_ID);
+        if (o.isPresent()) {
+            String str = o.get().getModInfo().getVersion().toString();
+            if (correctInDev && "NONE".equals(str))
+                return VERSION;
+            return str;
+        }
         return "0.0.0";
     }
 
     public static boolean isDevBuild() {
-        // TODO: How to check if deobfuscated?
-        return RUN_GENERATORS;
+        return "NONE".equals(getVersion(false));
+    }
+
+    public static ResourceLocation getId(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 
     public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID) {
