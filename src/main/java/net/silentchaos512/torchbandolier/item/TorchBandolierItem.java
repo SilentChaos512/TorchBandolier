@@ -1,5 +1,5 @@
 /*
- * TorchBandolier -- ItemTorchBandolier
+ * TorchBandolier -- TorchBandolierItem
  * Copyright (C) 2018 SilentChaos512
  *
  * This library is free software; you can redistribute it and/or
@@ -19,28 +19,25 @@
 package net.silentchaos512.torchbandolier.item;
 
 import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.silentchaos512.lib.item.ILeftClickItem;
-import net.silentchaos512.lib.util.EntityHelper;
+import net.silentchaos512.lib.item.FakeItemUseContext;
 import net.silentchaos512.lib.util.PlayerUtils;
 import net.silentchaos512.torchbandolier.TorchBandolier;
 import net.silentchaos512.torchbandolier.config.Config;
@@ -54,7 +51,7 @@ import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ItemTorchBandolier extends Item implements ILeftClickItem {
+public class TorchBandolierItem extends Item {
     private static final String NBT_ROOT = "TorchBandolier";
     private static final String NBT_AUTO_FILL = "AutoFill";
     private static final String NBT_COUNT = "Count";
@@ -63,11 +60,24 @@ public class ItemTorchBandolier extends Item implements ILeftClickItem {
 
     private final Lazy<Block> torchBlock;
 
-    public ItemTorchBandolier(@Nullable Block torchBlock) {
+    /**
+     * Use if {@code torchBlock} already exists. If the torch may not yet exist, or may not exist at
+     * all, use {@link TorchBandolierItem#TorchBandolierItem(Supplier)}.
+     *
+     * @param torchBlock The torch to store and place
+     */
+    public TorchBandolierItem(@Nullable Block torchBlock) {
         this(() -> torchBlock);
     }
 
-    public ItemTorchBandolier(Supplier<Block> torchBlock) {
+    /**
+     * Constructor for cases in which the existence of the torch block is questionable. It may come
+     * from an optional mod, or may just not exist yet.
+     *
+     * @param torchBlock The torch supplier, typically involves calling {@code getValue} on {@link
+     *                   net.minecraftforge.registries.ForgeRegistries#BLOCKS}.
+     */
+    public TorchBandolierItem(Supplier<Block> torchBlock) {
         super(new Properties()
                 .maxStackSize(1)
                 .setNoRepair()
@@ -76,12 +86,18 @@ public class ItemTorchBandolier extends Item implements ILeftClickItem {
         this.torchBlock = Lazy.of(torchBlock);
     }
 
+    /**
+     * Gets the torch this bandolier places. Could be null (empty bandolier) or air (bandolier with
+     * an invalid torch).
+     *
+     * @return The torch block placed
+     */
     @Nullable
     public Block getTorchBlock() {
         return torchBlock.get();
     }
 
-    public static ItemStack createStack(ItemTorchBandolier item, int torchCount) {
+    public static ItemStack createStack(TorchBandolierItem item, int torchCount) {
         ItemStack result = new ItemStack(item);
         setTorchCount(result, torchCount);
         setAutoFill(result, true);
@@ -91,15 +107,15 @@ public class ItemTorchBandolier extends Item implements ILeftClickItem {
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-        if (!worldIn.isRemote && worldIn.getGameTime() % ABSORB_DELAY == 0 && entityIn instanceof EntityPlayer && isAutoFillOn(stack)) {
-            absorbTorches(stack, (EntityPlayer) entityIn);
+        if (!worldIn.isRemote && worldIn.getGameTime() % ABSORB_DELAY == 0 && entityIn instanceof PlayerEntity && isAutoFillOn(stack)) {
+            absorbTorches(stack, (PlayerEntity) entityIn);
         }
     }
 
-    private void absorbTorches(ItemStack stack, EntityPlayer player) {
+    private void absorbTorches(ItemStack stack, PlayerEntity player) {
         int maxTorches = getMaxTorchCount(stack);
         Block torch = getTorchBlock();
-        if (torch == null || getTorchCount(stack) >= maxTorches) {
+        if (torch == null || torch instanceof AirBlock || getTorchCount(stack) >= maxTorches) {
             return;
         }
 
@@ -124,7 +140,7 @@ public class ItemTorchBandolier extends Item implements ILeftClickItem {
         }
     }
 
-    public static int absorbTorchesFromEntityItem(ItemStack bandolier, ItemStack blockStack) {
+    public static int absorbTorchesFromItemEntity(ItemStack bandolier, ItemStack blockStack) {
         int bandolierCount = getTorchCount(bandolier);
         int maxTorches = getMaxTorchCount(bandolier);
         int blockCount = blockStack.getCount();
@@ -139,8 +155,9 @@ public class ItemTorchBandolier extends Item implements ILeftClickItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        if (getTorchBlock() == null) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        Block torch = getTorchBlock();
+        if (torch == null || torch instanceof AirBlock) {
             return super.onItemRightClick(worldIn, playerIn, handIn);
         }
 
@@ -150,34 +167,35 @@ public class ItemTorchBandolier extends Item implements ILeftClickItem {
             boolean mode = !isAutoFillOn(stack);
             setAutoFill(stack, mode);
             String translationKey = "item.torchbandolier.torch_bandolier.autoFill." + (mode ? "on" : "off");
-            playerIn.sendStatusMessage(new TextComponentTranslation(translationKey), true);
+            playerIn.sendStatusMessage(new TranslationTextComponent(translationKey), true);
         }
-        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+        return new ActionResult<>(ActionResultType.SUCCESS, stack);
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemUseContext context) {
+    public ActionResultType onItemUse(ItemUseContext context) {
         Block torch = getTorchBlock();
-        if (torch == null) {
-            return EnumActionResult.PASS;
+        if (torch == null || torch instanceof AirBlock) {
+            return ActionResultType.PASS;
         }
 
         ItemStack stack = context.getItem();
-        EntityPlayer player = context.getPlayer();
-        if (getTorchCount(stack) <= 0 && (player == null || !player.abilities.isCreativeMode)) {
+        PlayerEntity player = context.getPlayer();
+        boolean consumeTorch = player == null || !player.playerAbilities.isCreativeMode;
+        if (getTorchCount(stack) <= 0 && consumeTorch) {
             // Empty and not in creative mode
-            return EnumActionResult.PASS;
+            return ActionResultType.PASS;
         }
 
         // Create fake block stack and use it
         ItemStack fakeBlockStack = new ItemStack(torch);
-        EnumActionResult result = fakeBlockStack.onItemUse(new ItemUseContext(player, fakeBlockStack, context.getPos(), context.getFace(), context.getHitX(), context.getHitY(), context.getHitZ()));
+        ActionResultType result = fakeBlockStack.onItemUse(new FakeItemUseContext(context, fakeBlockStack));
 
-        if (result == EnumActionResult.SUCCESS && !player.abilities.isCreativeMode) {
+        if (result == ActionResultType.SUCCESS && consumeTorch) {
             setTorchCount(stack, getTorchCount(stack) - 1);
         }
 
-        if (getTorchCount(stack) == 0) {
+        if (getTorchCount(stack) == 0 && player != null) {
             player.replaceItemInInventory(player.inventory.getSlotFor(stack), new ItemStack(ModItems.emptyTorchBandolier));
         }
 
@@ -185,61 +203,30 @@ public class ItemTorchBandolier extends Item implements ILeftClickItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemLeftClickSL(World world, EntityPlayer player, EnumHand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-
-        Block torch = getTorchBlock();
-        if (torch == null) {
-            return ActionResult.newResult(EnumActionResult.PASS, stack);
-        }
-
-        if (!player.world.isRemote && player.isSneaking() && getTorchCount(stack) > 0) {
-            // Create block stack to drop
-            ItemStack toDrop = new ItemStack(torch);
-            toDrop.setCount(Math.min(getTorchCount(stack), toDrop.getMaxStackSize()));
-            setTorchCount(stack, getTorchCount(stack) - toDrop.getCount());
-
-            // Make EntityItem and spawn in world
-            Vec3d vec = player.getLookVec().scale(2.0);
-            EntityItem entity = new EntityItem(world, player.posX + vec.x, player.posY + 1 + vec.y, player.posZ + vec.z, toDrop);
-            vec = vec.scale(-0.125);
-            entity.motionX = vec.x;
-            entity.motionY = vec.y;
-            entity.motionZ = vec.z;
-            EntityHelper.safeSpawn(entity);
-        }
-
-        ItemStack newStack = getTorchCount(stack) > 0 ? stack : new ItemStack(ModItems.emptyTorchBandolier);
-        return ActionResult.newResult(EnumActionResult.SUCCESS, newStack);
-    }
-
-    @Override
     public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> items) {
-        if (!isInGroup(tab) || getTorchBlock() == null) {
+        if (!isInGroup(tab) || getTorchBlock() instanceof AirBlock) {
             return;
         }
-        ItemStack full = new ItemStack(this);
-        setTorchCount(full, getMaxTorchCount(full));
-        items.add(full);
+        items.add(createStack(this, getMaxTorchCount()));
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         String key = "item.torchbandolier.torch_bandolier";
         Block torch = getTorchBlock();
-        ITextComponent blockName = torch != null
+        ITextComponent blockName = torch != null && !(torch instanceof AirBlock)
                 ? torch.getNameTextComponent()
-                : new TextComponentTranslation(key + ".empty");
-        tooltip.add(new TextComponentTranslation(key + ".blockPlaced", blockName));
+                : new TranslationTextComponent(key + ".empty");
+        tooltip.add(new TranslationTextComponent(key + ".blockPlaced", blockName));
 
         if (torch != null) {
             int torches = getTorchCount(stack);
             int maxTorches = getMaxTorchCount(stack);
-            tooltip.add(new TextComponentTranslation(key + ".count", torches, maxTorches));
+            tooltip.add(new TranslationTextComponent(key + ".count", torches, maxTorches));
             boolean autoFill = isAutoFillOn(stack);
-            tooltip.add(new TextComponentTranslation(key + ".autoFill." + (autoFill ? "on" : "off")));
+            tooltip.add(new TranslationTextComponent(key + ".autoFill." + (autoFill ? "on" : "off")));
         } else {
-            tooltip.add(new TextComponentTranslation(key + ".emptyHint").applyTextStyle(TextFormatting.ITALIC));
+            tooltip.add(new TranslationTextComponent(key + ".emptyHint").applyTextStyle(TextFormatting.ITALIC));
         }
     }
 
@@ -256,17 +243,10 @@ public class ItemTorchBandolier extends Item implements ILeftClickItem {
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
         int max = getMaxTorchCount(stack);
-        if (max <= 0) return 1.0;
-        return 1.0 - (double) getTorchCount(stack) / (double) max;
+        return max > 0 ? 1.0 - (double) getTorchCount(stack) / (double) max : 1.0;
     }
 
-    @Deprecated
-    @Nullable
-    private static Block getBlockPlaced(ItemStack stack) {
-        return Blocks.TORCH;
-    }
-    
-    private static NBTTagCompound getData(ItemStack stack) {
+    private static CompoundNBT getData(ItemStack stack) {
         return stack.getOrCreateChildTag(NBT_ROOT);
     }
 
@@ -278,8 +258,12 @@ public class ItemTorchBandolier extends Item implements ILeftClickItem {
         getData(stack).putInt(NBT_COUNT, value);
     }
 
-    public static int getMaxTorchCount(ItemStack stack) {
+    public static int getMaxTorchCount() {
         return Config.GENERAL.maxTorchCount.get();
+    }
+
+    public static int getMaxTorchCount(ItemStack stack) {
+        return getMaxTorchCount();
     }
 
     public static boolean isAutoFillOn(ItemStack stack) {

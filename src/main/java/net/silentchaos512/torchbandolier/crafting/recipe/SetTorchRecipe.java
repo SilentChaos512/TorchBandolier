@@ -1,21 +1,18 @@
 package net.silentchaos512.torchbandolier.crafting.recipe;
 
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.RecipeSerializers;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.torchbandolier.init.ModItems;
-import net.silentchaos512.torchbandolier.item.ItemTorchBandolier;
+import net.silentchaos512.torchbandolier.item.TorchBandolierItem;
 
-public final class SetTorchRecipe implements IRecipe {
-    public static final IRecipeSerializer<SetTorchRecipe> SERIALIZER = new RecipeSerializers.SimpleSerializer<>(
-            "torchbandolier:set_torch",
-            SetTorchRecipe::new
-    );
+public final class SetTorchRecipe implements ICraftingRecipe {
+    public static final IRecipeSerializer<SetTorchRecipe> SERIALIZER = new SpecialRecipeSerializer<>(SetTorchRecipe::new);
 
     private final ResourceLocation recipeId;
 
@@ -29,7 +26,7 @@ public final class SetTorchRecipe implements IRecipe {
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(CraftingInventory inv, World worldIn) {
         StackList list = StackList.from(inv);
         if (list.size() != 2) {
             return false;
@@ -40,13 +37,13 @@ public final class SetTorchRecipe implements IRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
-        ItemStack torch = StackList.from(inv).uniqueMatch(s -> !(s.getItem() instanceof ItemTorchBandolier));
-        ItemTorchBandolier item = ModItems.getTorchBandolier(torch.getItem());
+    public ItemStack getCraftingResult(CraftingInventory inv) {
+        ItemStack torch = StackList.from(inv).uniqueMatch(s -> !(s.getItem() instanceof TorchBandolierItem));
+        TorchBandolierItem item = ModItems.getTorchBandolier(torch.getItem());
         if (torch.isEmpty() || item == null) {
             return ItemStack.EMPTY;
         }
-        return ItemTorchBandolier.createStack(item, 1);
+        return TorchBandolierItem.createStack(item, 1);
     }
 
     @Override
