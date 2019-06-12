@@ -1,0 +1,12 @@
+{
+  "item.torchbandolier.empty_torch_bandolier": "空火把弹药袋",
+  "item.torchbandolier.stone_torch_bandolier": "石制火把弹药袋",
+  "item.torchbandolier.torch_bandolier": "火把弹药袋",
+  "item.torchbandolier.torch_bandolier.autoFill.off": "自动填充: §c关",
+  "item.torchbandolier.torch_bandolier.autoFill.on": "自动填充: §a开",
+  "item.torchbandolier.torch_bandolier.blockPlaced": "放置: %s",
+  "item.torchbandolier.torch_bandolier.count": "§e%d / %d",
+  "item.torchbandolier.torch_bandolier.empty": "空",
+  "item.torchbandolier.torch_bandolier.emptyHint": "与火把一起合成",
+  "itemGroup.torchbandolier": "火把弹药袋"
+}
