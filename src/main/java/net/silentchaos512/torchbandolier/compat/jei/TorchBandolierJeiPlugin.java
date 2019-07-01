@@ -1,13 +1,28 @@
 package net.silentchaos512.torchbandolier.compat.jei;
 
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaRecipeCategoryUid;
+import mezz.jei.api.registration.IRecipeRegistration;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapelessRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.silentchaos512.torchbandolier.TorchBandolier;
+import net.silentchaos512.torchbandolier.config.Config;
+import net.silentchaos512.torchbandolier.init.ModItems;
+import net.silentchaos512.torchbandolier.item.TorchBandolierItem;
 
-//@JeiPlugin
-public class TorchBandolierJeiPlugin /*implements IModPlugin*/ {
+import javax.annotation.Nonnull;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+@JeiPlugin
+public class TorchBandolierJeiPlugin implements IModPlugin {
     private static final ResourceLocation PLUGIN_UID = TorchBandolier.getId("plugin");
 
-    /*
     @Nonnull
     @Override
     public ResourceLocation getPluginUid() {
@@ -52,5 +67,4 @@ public class TorchBandolierJeiPlugin /*implements IModPlugin*/ {
                 VanillaRecipeCategoryUid.CRAFTING
         );
     }
-    */
 }

@@ -1,11 +1,14 @@
-## [Unreleased]
-### Added
-- Torch bandoliers can now support other types of torches, but these must be added as separate items (no custom types through configs or data packs)
-- Stone torch bandolier (Silent Gear)
-### Changed
-- Empty torch bandoliers are now a separate item
-- Torch type must be set by crafting a torch with an empty bandolier
-- Placing a torch bandolier in a crafting grid will allow you to extract torches, up to a stack at a time
+## [1.2.0]
+- Update to 1.14.3
+- Add Chinese translation (zh_cn.json) (XuyuEre)
+
+## [1.1.0] - 2019-06-11 (accidentally uploaded as 1.0.0)
+Updated to Minecraft 1.14.2
+## Added
+- Separate torch bandolier items
+    - Empty torch bandolier's are a new item
+    - Vanilla torch-holding bandolier are the old item
+    - Stone torch bandolier (Silent Gear, will add TiC support when said mod updates)
 
 ## [1.0.0]
 ### Added

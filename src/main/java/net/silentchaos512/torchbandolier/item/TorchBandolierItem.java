@@ -181,7 +181,7 @@ public class TorchBandolierItem extends Item {
 
         ItemStack stack = context.getItem();
         PlayerEntity player = context.getPlayer();
-        boolean consumeTorch = player == null || !player.playerAbilities.isCreativeMode;
+        boolean consumeTorch = player == null || !player.abilities.isCreativeMode;
         if (getTorchCount(stack) <= 0 && consumeTorch) {
             // Empty and not in creative mode
             return ActionResultType.PASS;

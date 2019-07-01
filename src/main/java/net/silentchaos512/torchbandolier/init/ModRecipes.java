@@ -14,6 +14,6 @@ public final class ModRecipes {
     }
 
     private static void register(String name, IRecipeSerializer<?> serializer) {
-        IRecipeSerializer.func_222156_a(TorchBandolier.MOD_ID + ":" + name, serializer);
+        IRecipeSerializer.register(TorchBandolier.MOD_ID + ":" + name, serializer);
     }
 }
