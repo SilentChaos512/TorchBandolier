@@ -26,7 +26,7 @@ public final class ModLoot {
         if (ADD_BANDOLIER_TO.contains(event.getName()) && !hasLootPool(event.getTable(), "torch_bandolier")) {
             event.getTable().addPool((new LootPool.Builder())
                     .name("torch_bandolier")
-                    .addEntry(ItemLootEntry.func_216168_a(ModItems.emptyTorchBandolier))
+                    .addEntry(ItemLootEntry.builder(ModItems.emptyTorchBandolier))
                     .acceptCondition(RandomChance.builder(0.2f))
                     .build());
         }
