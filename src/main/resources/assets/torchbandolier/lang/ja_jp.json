@@ -1,0 +1,12 @@
+{
+  "item.torchbandolier.empty_torch_bandolier": "空の松明弾体",
+  "item.torchbandolier.stone_torch_bandolier": "石の松明弾体",
+  "item.torchbandolier.torch_bandolier": "松明弾体",
+  "item.torchbandolier.torch_bandolier.autoFill.off": "自動装填: §cOff",
+  "item.torchbandolier.torch_bandolier.autoFill.on": "自動装填: §aOn",
+  "item.torchbandolier.torch_bandolier.blockPlaced": "Places: %s",
+  "item.torchbandolier.torch_bandolier.count": "§e%d / %d",
+  "item.torchbandolier.torch_bandolier.empty": "空",
+  "item.torchbandolier.torch_bandolier.emptyHint": "松明と一緒にクラフトで装填",
+  "itemGroup.torchbandolier": "Torch Bandolier"
+}
