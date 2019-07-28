@@ -1,3 +1,9 @@
+## [1.3.1] - 2019-07-28
+- Add Japanese translation (ja_jp.json) (noriokun4649)
+
+## [1.3.0]
+- Update to 1.14.4
+
 ## [1.2.0]
 - Update to 1.14.3
 - Add Chinese translation (zh_cn.json) (XuyuEre)
