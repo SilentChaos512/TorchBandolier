@@ -1,0 +1,12 @@
+{
+  "item.torchbandolier.empty_torch_bandolier": "Pusty bandolier na pochodnie",
+  "item.torchbandolier.stone_torch_bandolier": "Kamienny bandolier na pochodnie",
+  "item.torchbandolier.torch_bandolier": "Bandolier na pochodnie",
+  "item.torchbandolier.torch_bandolier.autoFill.off": "Automatyczne wypełnianie: §cWył",
+  "item.torchbandolier.torch_bandolier.autoFill.on": "Automatyczne wypełnianie: §aWł",
+  "item.torchbandolier.torch_bandolier.blockPlaced": "Umieszcza: %s",
+  "item.torchbandolier.torch_bandolier.count": "§e%d / %d",
+  "item.torchbandolier.torch_bandolier.empty": "Pusty",
+  "item.torchbandolier.torch_bandolier.emptyHint": "Stwórz z pochodnią",
+  "itemGroup.torchbandolier": "Torch Bandolier"
+}

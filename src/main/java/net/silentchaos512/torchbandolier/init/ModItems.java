@@ -47,13 +47,25 @@ public final class ModItems {
         torchBandolier = new TorchBandolierItem(Blocks.TORCH);
         registerTorchBandolier("empty_torch_bandolier", emptyTorchBandolier);
         registerTorchBandolier("torch_bandolier", torchBandolier);
-        registerTorchBandolier("stone_torch_bandolier", new TorchBandolierItem(() ->
-                ForgeRegistries.BLOCKS.getValue(new ResourceLocation("silentgear:stone_torch"))
-        ));
+        registerTorchBandolier("stone_torch_bandolier", new TorchBandolierItem(getTorch(
+                new ResourceLocation("silentgear:stone_torch"),
+                new ResourceLocation("slurpiesdongles:stone_torch")
+        )));
 
         if (TorchBandolier.isDevBuild()) {
             registerTorchBandolier("test_item", new TorchBandolierItem(Blocks.GLOWSTONE));
         }
+    }
+
+    @Nullable
+    private static Block getTorch(ResourceLocation... possibleIds) {
+        for (ResourceLocation id : possibleIds) {
+            Block block = ForgeRegistries.BLOCKS.getValue(id);
+            if (block != null) {
+                return block;
+            }
+        }
+        return null;
     }
 
     @Nullable
