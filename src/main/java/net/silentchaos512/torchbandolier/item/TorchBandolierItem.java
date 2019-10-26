@@ -196,10 +196,22 @@ public class TorchBandolierItem extends Item {
         }
 
         if (getTorchCount(stack) == 0 && player != null) {
-            player.replaceItemInInventory(player.inventory.getSlotFor(stack), new ItemStack(ModItems.emptyTorchBandolier));
+            player.replaceItemInInventory(getItemSlot(player, stack), new ItemStack(ModItems.emptyTorchBandolier));
         }
 
         return result;
+    }
+
+    private static int getItemSlot(PlayerEntity player, ItemStack stack) {
+        // Copied from PlayerInventory.getSlotFor (it's client-side only...)
+        for (int i = 0; i < player.inventory.mainInventory.size(); ++i) {
+            ItemStack stack1 = player.inventory.mainInventory.get(i);
+            if (!stack1.isEmpty() && stack.getItem() == stack1.getItem() && ItemStack.areItemStacksEqual(stack, stack1)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     @Override

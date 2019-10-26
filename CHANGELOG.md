@@ -1,3 +1,7 @@
+## [1.3.2] - 2019-10-26
+- Added Polish translation (Dolores_McDoodle)
+- Fixed server crash [#5]
+
 ## [1.3.1] - 2019-07-28
 - Add Japanese translation (ja_jp.json) (noriokun4649)
 
