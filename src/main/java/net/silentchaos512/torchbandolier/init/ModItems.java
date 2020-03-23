@@ -41,8 +41,6 @@ public final class ModItems {
     private ModItems() {}
 
     public static void registerAll(RegistryEvent.Register<Item> event) {
-        if (!event.getName().equals(ForgeRegistries.ITEMS.getRegistryName())) return;
-
         emptyTorchBandolier = new TorchBandolierItem((Block) null);
         torchBandolier = new TorchBandolierItem(Blocks.TORCH);
         registerTorchBandolier("empty_torch_bandolier", emptyTorchBandolier);

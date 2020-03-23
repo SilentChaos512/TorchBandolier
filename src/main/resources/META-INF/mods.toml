@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[27,)"
+loaderVersion="[31,)"
 issueTrackerURL="https://github.com/SilentChaos512/TorchBandolier/issues"
 displayURL="https://minecraft.curseforge.com/projects/torch-bandolier"
 logoFile="logo.png"
@@ -18,13 +18,13 @@ authors="SilentChaos512"
 [[dependencies.torchbandolier]]
     modId="forge"
     mandatory=true
-    versionRange="[27,)"
+    versionRange="[31,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.torchbandolier]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.3,1.14.4]"
+    versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"
 [[dependencies.torchbandolier]]

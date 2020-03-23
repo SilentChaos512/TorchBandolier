@@ -162,7 +162,7 @@ public class TorchBandolierItem extends Item {
         }
 
         ItemStack stack = playerIn.getHeldItem(handIn);
-        if (!playerIn.world.isRemote && playerIn.isSneaking()) {
+        if (!playerIn.world.isRemote && playerIn.isCrouching()) {
             // Toggle auto-fill
             boolean mode = !isAutoFillOn(stack);
             setAutoFill(stack, mode);
