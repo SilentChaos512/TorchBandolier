@@ -18,7 +18,7 @@ import java.util.Optional;
 public class TorchBandolier {
     public static final String MOD_ID = "torchbandolier";
     public static final String MOD_NAME = "Torch Bandolier";
-    public static final String VERSION = "1.1.0";
+    public static final String VERSION = "1.5.0";
 
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 

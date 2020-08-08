@@ -1,3 +1,7 @@
+## [1.5.0] - 2020-08-08
+- Port to 1.16.1
+- Added soul torch bandolier
+
 ## [1.3.2] - 2019-10-26
 - Added Polish translation (Dolores_McDoodle)
 - Fixed server crash [#5]

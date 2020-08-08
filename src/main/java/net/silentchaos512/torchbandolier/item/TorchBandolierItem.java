@@ -227,7 +227,7 @@ public class TorchBandolierItem extends Item {
         String key = "item.torchbandolier.torch_bandolier";
         Block torch = getTorchBlock();
         ITextComponent blockName = torch != null && !(torch instanceof AirBlock)
-                ? torch.getNameTextComponent()
+                ? torch.getTranslatedName()
                 : new TranslationTextComponent(key + ".empty");
         tooltip.add(new TranslationTextComponent(key + ".blockPlaced", blockName));
 
@@ -238,7 +238,7 @@ public class TorchBandolierItem extends Item {
             boolean autoFill = isAutoFillOn(stack);
             tooltip.add(new TranslationTextComponent(key + ".autoFill." + (autoFill ? "on" : "off")));
         } else {
-            tooltip.add(new TranslationTextComponent(key + ".emptyHint").applyTextStyle(TextFormatting.ITALIC));
+            tooltip.add(new TranslationTextComponent(key + ".emptyHint").mergeStyle(TextFormatting.ITALIC));
         }
     }
 

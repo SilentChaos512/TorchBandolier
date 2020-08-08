@@ -36,6 +36,7 @@ import java.util.stream.Stream;
 public final class ModItems {
     public static TorchBandolierItem emptyTorchBandolier;
     public static TorchBandolierItem torchBandolier;
+    public static TorchBandolierItem soulTorchBandolier;
     private static final Map<Item, TorchBandolierItem> TORCH_BANDOLIERS = new HashMap<>();
 
     private ModItems() {}
@@ -43,8 +44,10 @@ public final class ModItems {
     public static void registerAll(RegistryEvent.Register<Item> event) {
         emptyTorchBandolier = new TorchBandolierItem((Block) null);
         torchBandolier = new TorchBandolierItem(Blocks.TORCH);
+        soulTorchBandolier = new TorchBandolierItem(Blocks.SOUL_TORCH);
         registerTorchBandolier("empty_torch_bandolier", emptyTorchBandolier);
         registerTorchBandolier("torch_bandolier", torchBandolier);
+        registerTorchBandolier("soul_torch_bandolier", soulTorchBandolier);
         registerTorchBandolier("stone_torch_bandolier", new TorchBandolierItem(getTorch(
                 new ResourceLocation("silentgear:stone_torch"),
                 new ResourceLocation("slurpiesdongles:stone_torch")
