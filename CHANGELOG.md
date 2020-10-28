@@ -1,3 +1,6 @@
+## [1.5.1]
+- Update for 1.16.3 and recent Forge versions
+
 ## [1.5.0] - 2020-08-08
 - Port to 1.16.1
 - Added soul torch bandolier

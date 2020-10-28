@@ -23,40 +23,34 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.silentchaos512.torchbandolier.TorchBandolier;
+import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.torchbandolier.item.TorchBandolierItem;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public final class ModItems {
-    public static TorchBandolierItem emptyTorchBandolier;
-    public static TorchBandolierItem torchBandolier;
-    public static TorchBandolierItem soulTorchBandolier;
+    public static final ItemRegistryObject<TorchBandolierItem> EMPTY_TORCH_BANDOLIER = register("empty_torch_bandolier", () ->
+            new TorchBandolierItem((Block) null));
+    public static final ItemRegistryObject<TorchBandolierItem> TORCH_BANDOLIER = register("torch_bandolier", () ->
+        new TorchBandolierItem(Blocks.TORCH));
+    public static final ItemRegistryObject<TorchBandolierItem> SOUL_TORCH_BANDOLIER = register("soul_torch_bandolier", () ->
+            new TorchBandolierItem(Blocks.SOUL_TORCH));
+    public static final ItemRegistryObject<TorchBandolierItem> STONE_TORCH_BANDOLIER = register("stone_torch_bandolier", () ->
+            new TorchBandolierItem(getTorch(
+                    new ResourceLocation("silentgear", "stone_torch"),
+                    new ResourceLocation("slurpiesdongles", "stone_torch")
+            )));
+
     private static final Map<Item, TorchBandolierItem> TORCH_BANDOLIERS = new HashMap<>();
 
     private ModItems() {}
 
-    public static void registerAll(RegistryEvent.Register<Item> event) {
-        emptyTorchBandolier = new TorchBandolierItem((Block) null);
-        torchBandolier = new TorchBandolierItem(Blocks.TORCH);
-        soulTorchBandolier = new TorchBandolierItem(Blocks.SOUL_TORCH);
-        registerTorchBandolier("empty_torch_bandolier", emptyTorchBandolier);
-        registerTorchBandolier("torch_bandolier", torchBandolier);
-        registerTorchBandolier("soul_torch_bandolier", soulTorchBandolier);
-        registerTorchBandolier("stone_torch_bandolier", new TorchBandolierItem(getTorch(
-                new ResourceLocation("silentgear:stone_torch"),
-                new ResourceLocation("slurpiesdongles:stone_torch")
-        )));
-
-        if (TorchBandolier.isDevBuild()) {
-            registerTorchBandolier("test_item", new TorchBandolierItem(Blocks.GLOWSTONE));
-        }
-    }
+    static void register() {}
 
     @Nullable
     private static Block getTorch(ResourceLocation... possibleIds) {
@@ -71,29 +65,20 @@ public final class ModItems {
 
     @Nullable
     public static TorchBandolierItem getTorchBandolier(IItemProvider torch) {
-        return TORCH_BANDOLIERS.get(torch.asItem());
+        return Registration.ITEMS.getEntries().stream()
+                .filter(ro -> ro.get() instanceof TorchBandolierItem)
+                .map(ro -> (TorchBandolierItem) ro.get())
+                .filter(item -> item.getTorchBlock() != null && item.getTorchBlock().asItem() == torch)
+                .findAny().orElse(null);
     }
 
-    public static void registerTorchBandolier(ResourceLocation name, TorchBandolierItem item) {
-        Block torch = item.getTorchBlock();
-        if (torch != null) {
-            TORCH_BANDOLIERS.put(torch.asItem(), item);
-        }
-        register(name, item);
+    private static <T extends Item> ItemRegistryObject<T> register(String name, Supplier<T> item) {
+        return new ItemRegistryObject<>(Registration.ITEMS.register(name, item));
     }
 
-    private static void registerTorchBandolier(String name, TorchBandolierItem item) {
-        registerTorchBandolier(TorchBandolier.getId(name), item);
-    }
-
-    private static void register(ResourceLocation name, Item item) {
-        if (item.getRegistryName() == null) {
-            item.setRegistryName(name);
-        }
-        ForgeRegistries.ITEMS.register(item);
-    }
-
-    public static Stream<Map.Entry<Item, TorchBandolierItem>> getTorchBandolierPairs() {
-        return TORCH_BANDOLIERS.entrySet().stream();
+    public static Stream<TorchBandolierItem> getTorchBandoliers() {
+        return Registration.ITEMS.getEntries().stream()
+                .filter(ro -> ro.get() instanceof TorchBandolierItem)
+                .map(ro -> (TorchBandolierItem) ro.get());
     }
 }

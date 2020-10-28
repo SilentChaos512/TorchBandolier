@@ -2,27 +2,23 @@ package net.silentchaos512.torchbandolier.crafting.recipe;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
+import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.torchbandolier.init.ModItems;
+import net.silentchaos512.torchbandolier.init.ModRecipes;
 import net.silentchaos512.torchbandolier.item.TorchBandolierItem;
 
-public final class SetTorchRecipe implements ICraftingRecipe {
-    public static final IRecipeSerializer<SetTorchRecipe> SERIALIZER = new SpecialRecipeSerializer<>(SetTorchRecipe::new);
-
-    private final ResourceLocation recipeId;
-
-    private SetTorchRecipe(ResourceLocation id) {
-        this.recipeId = id;
+public final class SetTorchRecipe extends SpecialRecipe {
+    public SetTorchRecipe(ResourceLocation id) {
+        super(id);
     }
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return SERIALIZER;
+        return ModRecipes.SET_TORCH.get();
     }
 
     @Override
@@ -31,7 +27,7 @@ public final class SetTorchRecipe implements ICraftingRecipe {
         if (list.size() != 2) {
             return false;
         }
-        int numEmptyBandolier = list.countOfMatches(s -> s.getItem() == ModItems.emptyTorchBandolier);
+        int numEmptyBandolier = list.countOfMatches(s -> s.getItem() == ModItems.EMPTY_TORCH_BANDOLIER.get());
         int numTorch = list.countOfMatches(s -> ModItems.getTorchBandolier(s.getItem()) != null);
         return numEmptyBandolier == 1 && numTorch == 1;
     }
@@ -44,17 +40,6 @@ public final class SetTorchRecipe implements ICraftingRecipe {
             return ItemStack.EMPTY;
         }
         return TorchBandolierItem.createStack(item, 1);
-    }
-
-    @Override
-    public ItemStack getRecipeOutput() {
-        // Cannot determine
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return recipeId;
     }
 
     @Override

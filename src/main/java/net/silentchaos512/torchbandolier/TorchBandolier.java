@@ -27,8 +27,7 @@ public class TorchBandolier {
 
     public TorchBandolier() {
         INSTANCE = this;
-        //noinspection Convert2MethodRef
-        PROXY = DistExecutor.runForDist(() -> () -> new SideProxy.Client(), () -> () -> new SideProxy.Server());
+        PROXY = DistExecutor.safeRunForDist(() -> SideProxy.Client::new, () -> SideProxy.Server::new);
     }
 
     public static String getVersion() {
@@ -57,7 +56,7 @@ public class TorchBandolier {
     public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID) {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(ModItems.torchBandolier);
+            return new ItemStack(ModItems.TORCH_BANDOLIER);
         }
     };
 }

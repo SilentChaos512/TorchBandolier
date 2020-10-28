@@ -196,7 +196,7 @@ public class TorchBandolierItem extends Item {
         }
 
         if (getTorchCount(stack) == 0 && player != null) {
-            player.replaceItemInInventory(getItemSlot(player, stack), new ItemStack(ModItems.emptyTorchBandolier));
+            player.replaceItemInInventory(getItemSlot(player, stack), new ItemStack(ModItems.EMPTY_TORCH_BANDOLIER));
         }
 
         return result;
