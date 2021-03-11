@@ -1,3 +1,7 @@
+## [1.5.2] - 2021-03-10
+- Fixed torch duplication [#7]
+- Update recipe to use `forge:leather` tag
+
 ## [1.5.1] - 2020-10-28
 - Update for 1.16.3 and recent Forge versions
 

@@ -151,7 +151,7 @@ public class TorchBandolierItem extends Item {
             String translationKey = "item.torchbandolier.torch_bandolier.autoFill." + (mode ? "on" : "off");
             playerIn.sendStatusMessage(new TranslationTextComponent(translationKey), true);
         }
-        return new ActionResult<>(ActionResultType.SUCCESS, stack);
+        return new ActionResult<>(ActionResultType.CONSUME, stack);
     }
 
     @Override
@@ -173,7 +173,7 @@ public class TorchBandolierItem extends Item {
         ItemStack fakeBlockStack = new ItemStack(torch);
         ActionResultType result = fakeBlockStack.onItemUse(new FakeItemUseContext(context, fakeBlockStack));
 
-        if (result == ActionResultType.SUCCESS && consumeTorch) {
+        if (result.isSuccessOrConsume() && consumeTorch) {
             setTorchCount(stack, getTorchCount(stack) - 1);
         }
 
