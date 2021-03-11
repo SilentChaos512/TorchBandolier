@@ -1,4 +1,4 @@
-## [1.5.1]
+## [1.5.1] - 2020-10-28
 - Update for 1.16.3 and recent Forge versions
 
 ## [1.5.0] - 2020-08-08
