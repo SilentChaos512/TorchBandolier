@@ -7,7 +7,7 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:leather"
+      "tag": "forge:leather"
     },
     "/": {
       "tag": "forge:rods/wooden"
