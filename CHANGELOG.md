@@ -1,3 +1,6 @@
+## [1.5.3] - 2021-07-23
+- Updated to official Mojang mappings. Should still work with Silent Lib 4.9.x.
+
 ## [1.5.2] - 2021-03-10
 - Fixed torch duplication [#7]
 - Update recipe to use `forge:leather` tag
