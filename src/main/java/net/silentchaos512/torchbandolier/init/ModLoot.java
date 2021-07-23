@@ -17,8 +17,8 @@ import java.util.Set;
 @Mod.EventBusSubscriber(modid = TorchBandolier.MOD_ID)
 public final class ModLoot {
     private static final Set<ResourceLocation> ADD_BANDOLIER_TO = ImmutableSet.of(
-            LootTables.CHESTS_ABANDONED_MINESHAFT,
-            LootTables.CHESTS_SIMPLE_DUNGEON
+            LootTables.ABANDONED_MINESHAFT,
+            LootTables.SIMPLE_DUNGEON
     );
 
     @SubscribeEvent
@@ -26,8 +26,8 @@ public final class ModLoot {
         if (ADD_BANDOLIER_TO.contains(event.getName()) && !hasLootPool(event.getTable(), "torch_bandolier")) {
             event.getTable().addPool((new LootPool.Builder())
                     .name("torch_bandolier")
-                    .addEntry(ItemLootEntry.builder(ModItems.EMPTY_TORCH_BANDOLIER))
-                    .acceptCondition(RandomChance.builder(0.2f))
+                    .add(ItemLootEntry.lootTableItem(ModItems.EMPTY_TORCH_BANDOLIER))
+                    .when(RandomChance.randomChance(0.2f))
                     .build());
         }
     }

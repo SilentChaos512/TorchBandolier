@@ -33,7 +33,7 @@ public final class SetTorchRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory inv) {
         ItemStack torch = StackList.from(inv).uniqueMatch(s -> !(s.getItem() instanceof TorchBandolierItem));
         TorchBandolierItem item = ModItems.getTorchBandolier(torch.getItem());
         if (torch.isEmpty() || item == null) {
@@ -43,7 +43,7 @@ public final class SetTorchRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height > 1;
     }
 }

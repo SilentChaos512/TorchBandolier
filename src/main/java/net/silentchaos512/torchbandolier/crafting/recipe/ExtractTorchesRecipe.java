@@ -35,7 +35,7 @@ public final class ExtractTorchesRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory inv) {
         ItemStack stack = StackList.from(inv).uniqueOfType(TorchBandolierItem.class);
         TorchBandolierItem item = (TorchBandolierItem) stack.getItem();
         Block block = item.getTorchBlock();
@@ -48,13 +48,13 @@ public final class ExtractTorchesRecipe extends SpecialRecipe {
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
-        NonNullList<ItemStack> list = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+        NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
 
         for(int i = 0; i < list.size(); ++i) {
-            ItemStack item = inv.getStackInSlot(i);
+            ItemStack item = inv.getItem(i);
             if (item.getItem() instanceof TorchBandolierItem) {
                 // Extract torches, but leave the modified bandolier in the crafting grid
-                ItemStack torches = getCraftingResult(inv);
+                ItemStack torches = assemble(inv);
                 int newTorchCount = TorchBandolierItem.getTorchCount(item) - torches.getCount();
                 ItemStack newBandolier;
                 if (newTorchCount > 0) {
@@ -75,7 +75,7 @@ public final class ExtractTorchesRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height > 1;
     }
 }

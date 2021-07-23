@@ -50,7 +50,7 @@ def gpr_creds = { // Credentials for GitHub Packages, since this is used multipl
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: project.mcp_channel.toString(), version: project.mcp_mappings.toString()
+    mappings channel: mappings_channel, version: mappings_version
 
     runs {
         client = {
@@ -138,7 +138,7 @@ curseforge {
             releaseType = project.cf_release_type
             addGameVersion(project.mc_version)
             addGameVersion('1.16.4')
-            addGameVersion('1.16.5')
+            addGameVersion('1.16.3')
             mainArtifact(jar) {
 //                displayName = "$project.description $display_version"
                 relations {

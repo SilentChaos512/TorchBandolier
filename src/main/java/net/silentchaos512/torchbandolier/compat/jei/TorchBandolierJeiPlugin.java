@@ -42,10 +42,10 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
                                     TorchBandolier.getId("dummy_set_" + NameUtils.from(item).getPath()),
                                     "",
                                     TorchBandolierItem.createStack(item, 1),
-                                    NonNullList.from(
+                                    NonNullList.of(
                                             Ingredient.EMPTY,
-                                            Ingredient.fromItems(ModItems.EMPTY_TORCH_BANDOLIER),
-                                            Ingredient.fromItems(torch)
+                                            Ingredient.of(ModItems.EMPTY_TORCH_BANDOLIER),
+                                            Ingredient.of(torch)
                                     )
                             );
                         })
@@ -56,16 +56,16 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
         //noinspection deprecation
         registration.addRecipes(
                 ModItems.getTorchBandoliers()
-                        .filter(item -> item.getTorchBlock() != null && !item.getTorchBlock().getDefaultState().isAir())
+                        .filter(item -> item.getTorchBlock() != null && !item.getTorchBlock().defaultBlockState().isAir())
                         .map(item -> {
                             Item torch = item.getTorchBlock().asItem();
                             return new ShapelessRecipe(
                                     TorchBandolier.getId("dummy_extract_" + Objects.requireNonNull(item.getRegistryName()).getPath()),
                                     "",
                                     new ItemStack(torch, 64),
-                                    NonNullList.from(
+                                    NonNullList.of(
                                             Ingredient.EMPTY,
-                                            Ingredient.fromStacks(TorchBandolierItem.createStack(item, Config.GENERAL.maxTorchCount.get()))
+                                            Ingredient.of(TorchBandolierItem.createStack(item, Config.GENERAL.maxTorchCount.get()))
                                     )
                             );
                         })

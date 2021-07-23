@@ -55,7 +55,7 @@ public class TorchBandolier {
 
     public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID) {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(ModItems.TORCH_BANDOLIER);
         }
     };
