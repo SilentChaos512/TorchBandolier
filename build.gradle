@@ -1,22 +1,21 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 
 plugins {
-    id 'maven'
     id 'maven-publish'
     id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
 repositories {
     flatDir {
@@ -24,7 +23,6 @@ repositories {
         dirs "repo"
     }
     mavenLocal()
-    jcenter()
 }
 
 tasks.withType(JavaCompile) {
@@ -47,27 +45,26 @@ def gpr_creds = { // Credentials for GitHub Packages, since this is used multipl
     password = property('gpr.token')
 }
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 minecraft {
-    mappings channel: mappings_channel, version: mappings_version
+    mappings channel: 'official', version: mc_version
 
     runs {
         client = {
+            workingDirectory project.file('run')
             properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run').canonicalPath
             source sourceSets.main
         }
         server = {
+            workingDirectory project.file('run')
             properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run').canonicalPath
             source sourceSets.main
         }
     }
 }
 
 repositories {
-    jcenter()
     mavenLocal()
     maven {
         url = uri("https://maven.pkg.github.com/silentchaos512/silentlib")
@@ -92,13 +89,16 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
-    compile fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
+    compileOnly fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
+        exclude module: "forge"
+    }
+    runtimeOnly fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
         exclude module: "forge"
     }
 
     // JEI
     compileOnly fg.deobf("mezz.jei:jei-${project.jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${project.jei_version}")
+//    runtimeOnly fg.deobf("mezz.jei:jei-${project.jei_version}")
 }
 
 jar {

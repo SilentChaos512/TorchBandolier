@@ -2,9 +2,9 @@ package net.silentchaos512.torchbandolier;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmlserverevents.FMLServerAboutToStartEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
 import net.silentchaos512.torchbandolier.config.Config;
 import net.silentchaos512.torchbandolier.init.Registration;
 

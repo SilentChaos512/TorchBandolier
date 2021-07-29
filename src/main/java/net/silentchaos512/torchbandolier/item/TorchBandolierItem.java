@@ -1,24 +1,24 @@
 package net.silentchaos512.torchbandolier.item;
 
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.AirBlock;
-import net.minecraft.block.Block;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.Block;
 import net.silentchaos512.lib.item.FakeItemUseContext;
 import net.silentchaos512.lib.util.PlayerUtils;
 import net.silentchaos512.torchbandolier.TorchBandolier;
@@ -87,14 +87,14 @@ public class TorchBandolierItem extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-        if (!worldIn.isClientSide && worldIn.getGameTime() % ABSORB_DELAY == 0 && entityIn instanceof PlayerEntity && isAutoFillOn(stack)) {
-            absorbTorches(stack, (PlayerEntity) entityIn);
+        if (!worldIn.isClientSide && worldIn.getGameTime() % ABSORB_DELAY == 0 && entityIn instanceof Player && isAutoFillOn(stack)) {
+            absorbTorches(stack, (Player) entityIn);
         }
     }
 
-    private void absorbTorches(ItemStack stack, PlayerEntity player) {
+    private void absorbTorches(ItemStack stack, Player player) {
         int maxTorches = getMaxTorchCount(stack);
         Block torch = getTorchBlock();
         if (torch == null || torch instanceof AirBlock || getTorchCount(stack) >= maxTorches) {
@@ -137,7 +137,7 @@ public class TorchBandolierItem extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         Block torch = getTorchBlock();
         if (torch == null || torch instanceof AirBlock) {
             return super.use(worldIn, playerIn, handIn);
@@ -149,45 +149,45 @@ public class TorchBandolierItem extends Item {
             boolean mode = !isAutoFillOn(stack);
             setAutoFill(stack, mode);
             String translationKey = "item.torchbandolier.torch_bandolier.autoFill." + (mode ? "on" : "off");
-            playerIn.displayClientMessage(new TranslationTextComponent(translationKey), true);
+            playerIn.displayClientMessage(new TranslatableComponent(translationKey), true);
         }
-        return new ActionResult<>(ActionResultType.CONSUME, stack);
+        return new InteractionResultHolder<>(InteractionResult.CONSUME, stack);
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         Block torch = getTorchBlock();
         if (torch == null || torch instanceof AirBlock) {
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
         }
 
         ItemStack stack = context.getItemInHand();
-        PlayerEntity player = context.getPlayer();
-        boolean consumeTorch = player == null || !player.abilities.instabuild;
+        Player player = context.getPlayer();
+        boolean consumeTorch = player == null || !player.getAbilities().instabuild;
         if (getTorchCount(stack) <= 0 && consumeTorch) {
             // Empty and not in creative mode
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
         }
 
         // Create fake block stack and use it
         ItemStack fakeBlockStack = new ItemStack(torch);
-        ActionResultType result = fakeBlockStack.useOn(new FakeItemUseContext(context, fakeBlockStack));
+        InteractionResult result = fakeBlockStack.useOn(new FakeItemUseContext(context, fakeBlockStack));
 
         if (result.consumesAction() && consumeTorch) {
             setTorchCount(stack, getTorchCount(stack) - 1);
         }
 
         if (getTorchCount(stack) == 0 && player != null) {
-            player.setSlot(getItemSlot(player, stack), new ItemStack(ModItems.EMPTY_TORCH_BANDOLIER));
+            player.getInventory().setItem(getItemSlot(player, stack), new ItemStack(ModItems.EMPTY_TORCH_BANDOLIER));
         }
 
         return result;
     }
 
-    private static int getItemSlot(PlayerEntity player, ItemStack stack) {
+    private static int getItemSlot(Player player, ItemStack stack) {
         // Copied from PlayerInventory.getSlotFor (it's client-side only...)
-        for (int i = 0; i < player.inventory.items.size(); ++i) {
-            ItemStack stack1 = player.inventory.items.get(i);
+        for (int i = 0; i < player.getInventory().getContainerSize(); ++i) {
+            ItemStack stack1 = player.getInventory().getItem(i);
             if (!stack1.isEmpty() && stack.getItem() == stack1.getItem() && ItemStack.matches(stack, stack1)) {
                 return i;
             }
@@ -197,7 +197,7 @@ public class TorchBandolierItem extends Item {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
         if (!allowdedIn(tab) || getTorchBlock() instanceof AirBlock) {
             return;
         }
@@ -205,22 +205,22 @@ public class TorchBandolierItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         String key = "item.torchbandolier.torch_bandolier";
         Block torch = getTorchBlock();
-        ITextComponent blockName = torch != null && !(torch instanceof AirBlock)
+        Component blockName = torch != null && !(torch instanceof AirBlock)
                 ? torch.getName()
-                : new TranslationTextComponent(key + ".empty");
-        tooltip.add(new TranslationTextComponent(key + ".blockPlaced", blockName));
+                : new TranslatableComponent(key + ".empty");
+        tooltip.add(new TranslatableComponent(key + ".blockPlaced", blockName));
 
         if (torch != null) {
             int torches = getTorchCount(stack);
             int maxTorches = getMaxTorchCount(stack);
-            tooltip.add(new TranslationTextComponent(key + ".count", torches, maxTorches));
+            tooltip.add(new TranslatableComponent(key + ".count", torches, maxTorches));
             boolean autoFill = isAutoFillOn(stack);
-            tooltip.add(new TranslationTextComponent(key + ".autoFill." + (autoFill ? "on" : "off")));
+            tooltip.add(new TranslatableComponent(key + ".autoFill." + (autoFill ? "on" : "off")));
         } else {
-            tooltip.add(new TranslationTextComponent(key + ".emptyHint").withStyle(TextFormatting.ITALIC));
+            tooltip.add(new TranslatableComponent(key + ".emptyHint").withStyle(ChatFormatting.ITALIC));
         }
     }
 
@@ -240,7 +240,7 @@ public class TorchBandolierItem extends Item {
         return max > 0 ? 1.0 - (double) getTorchCount(stack) / (double) max : 1.0;
     }
 
-    private static CompoundNBT getData(ItemStack stack) {
+    private static CompoundTag getData(ItemStack stack) {
         return stack.getOrCreateTagElement(NBT_ROOT);
     }
 

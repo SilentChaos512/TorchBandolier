@@ -1,30 +1,30 @@
 package net.silentchaos512.torchbandolier.crafting.recipe;
 
-import net.minecraft.block.Block;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.torchbandolier.init.ModItems;
 import net.silentchaos512.torchbandolier.init.ModRecipes;
 import net.silentchaos512.torchbandolier.item.TorchBandolierItem;
 
-public final class ExtractTorchesRecipe extends SpecialRecipe {
+public final class ExtractTorchesRecipe extends CustomRecipe {
     public ExtractTorchesRecipe(ResourceLocation id) {
         super(id);
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.EXTRACT_TORCHES.get();
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         StackList list = StackList.from(inv);
         if (list.size() != 1) {
             return false;
@@ -35,7 +35,7 @@ public final class ExtractTorchesRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         ItemStack stack = StackList.from(inv).uniqueOfType(TorchBandolierItem.class);
         TorchBandolierItem item = (TorchBandolierItem) stack.getItem();
         Block block = item.getTorchBlock();
@@ -47,7 +47,7 @@ public final class ExtractTorchesRecipe extends SpecialRecipe {
 
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
+    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
         NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
 
         for(int i = 0; i < list.size(); ++i) {

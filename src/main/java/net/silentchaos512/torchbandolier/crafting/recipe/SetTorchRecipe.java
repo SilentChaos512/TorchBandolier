@@ -1,28 +1,28 @@
 package net.silentchaos512.torchbandolier.crafting.recipe;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 import net.silentchaos512.lib.collection.StackList;
 import net.silentchaos512.torchbandolier.init.ModItems;
 import net.silentchaos512.torchbandolier.init.ModRecipes;
 import net.silentchaos512.torchbandolier.item.TorchBandolierItem;
 
-public final class SetTorchRecipe extends SpecialRecipe {
+public final class SetTorchRecipe extends CustomRecipe {
     public SetTorchRecipe(ResourceLocation id) {
         super(id);
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipes.SET_TORCH.get();
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         StackList list = StackList.from(inv);
         if (list.size() != 2) {
             return false;
@@ -33,7 +33,7 @@ public final class SetTorchRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         ItemStack torch = StackList.from(inv).uniqueMatch(s -> !(s.getItem() instanceof TorchBandolierItem));
         TorchBandolierItem item = ModItems.getTorchBandolier(torch.getItem());
         if (torch.isEmpty() || item == null) {

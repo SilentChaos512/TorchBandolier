@@ -1,15 +1,16 @@
+/*
 package net.silentchaos512.torchbandolier.compat.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapelessRecipe;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.torchbandolier.TorchBandolier;
 import net.silentchaos512.torchbandolier.config.Config;
@@ -74,3 +75,4 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
         );
     }
 }
+*/

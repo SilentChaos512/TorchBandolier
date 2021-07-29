@@ -1,3 +1,6 @@
+## [1.6.0] - 2021-07-28
+- Updated to Minecraft 1.17.1
+
 ## [1.5.3] - 2021-07-23
 - Updated to official Mojang mappings. Should still work with Silent Lib 4.9.x.
 

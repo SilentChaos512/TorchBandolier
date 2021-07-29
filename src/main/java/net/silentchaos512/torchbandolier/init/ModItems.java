@@ -1,28 +1,10 @@
-/*
- * TorchBandolier -- ModItems
- * Copyright (C) 2018 SilentChaos512
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation version 3
- * of the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net.silentchaos512.torchbandolier.init;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.silentchaos512.lib.registry.ItemRegistryObject;
 import net.silentchaos512.torchbandolier.item.TorchBandolierItem;
@@ -64,7 +46,7 @@ public final class ModItems {
     }
 
     @Nullable
-    public static TorchBandolierItem getTorchBandolier(IItemProvider torch) {
+    public static TorchBandolierItem getTorchBandolier(ItemLike torch) {
         return Registration.ITEMS.getEntries().stream()
                 .filter(ro -> ro.get() instanceof TorchBandolierItem)
                 .map(ro -> (TorchBandolierItem) ro.get())
