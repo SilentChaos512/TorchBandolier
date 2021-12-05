@@ -2,7 +2,7 @@ package net.silentchaos512.torchbandolier.init;
 
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import net.silentchaos512.torchbandolier.crafting.recipe.ExtractTorchesRecipe;
 import net.silentchaos512.torchbandolier.crafting.recipe.SetTorchRecipe;
 

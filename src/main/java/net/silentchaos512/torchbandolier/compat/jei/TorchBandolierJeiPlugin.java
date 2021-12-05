@@ -1,4 +1,3 @@
-/*
 package net.silentchaos512.torchbandolier.compat.jei;
 
 import mezz.jei.api.IModPlugin;
@@ -54,7 +53,6 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
                 VanillaRecipeCategoryUid.CRAFTING
         );
         // Extract torches recipes
-        //noinspection deprecation
         registration.addRecipes(
                 ModItems.getTorchBandoliers()
                         .filter(item -> item.getTorchBlock() != null && !item.getTorchBlock().defaultBlockState().isAir())
@@ -75,4 +73,3 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
         );
     }
 }
-*/

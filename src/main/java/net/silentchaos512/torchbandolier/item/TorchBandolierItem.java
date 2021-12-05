@@ -6,6 +6,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -230,14 +231,21 @@ public class TorchBandolierItem extends Item {
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return getTorchBlock() != null;
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
+    public int getBarWidth(ItemStack stack) {
         int max = getMaxTorchCount(stack);
-        return max > 0 ? 1.0 - (double) getTorchCount(stack) / (double) max : 1.0;
+        return max > 0 ? Math.round(13f * getTorchCount(stack) / max) : 13;
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        int max = getMaxTorchCount(stack);
+        float f = Math.max(0.0F, (float) getTorchCount(stack) / max);
+        return Mth.hsvToRgb(f / 3.0F, 1.0F, 1.0F);
     }
 
     private static CompoundTag getData(ItemStack stack) {
