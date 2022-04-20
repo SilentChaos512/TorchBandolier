@@ -1,3 +1,6 @@
+## [1.8.0] - 2022-04-19
+- Updated to Minecraft 1.18.2
+
 ## [1.7.0] - 2021-12-05
 - Updated to Minecraft 1.18
 
