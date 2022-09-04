@@ -66,8 +66,8 @@ public final class ExtractTorchesRecipe extends CustomRecipe {
                 }
                 list.set(i, newBandolier);
             }
-            else if (item.hasContainerItem()) {
-                list.set(i, item.getContainerItem());
+            else if (item.hasCraftingRemainingItem()) {
+                list.set(i, item.getCraftingRemainingItem());
             }
         }
 

@@ -5,7 +5,6 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -150,7 +149,7 @@ public class TorchBandolierItem extends Item {
             boolean mode = !isAutoFillOn(stack);
             setAutoFill(stack, mode);
             String translationKey = "item.torchbandolier.torch_bandolier.autoFill." + (mode ? "on" : "off");
-            playerIn.displayClientMessage(new TranslatableComponent(translationKey), true);
+            playerIn.displayClientMessage(Component.translatable(translationKey), true);
         }
         return new InteractionResultHolder<>(InteractionResult.CONSUME, stack);
     }
@@ -199,7 +198,7 @@ public class TorchBandolierItem extends Item {
 
     @Override
     public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
-        if (!allowdedIn(tab) || getTorchBlock() instanceof AirBlock) {
+        if (!allowedIn(tab) || getTorchBlock() instanceof AirBlock) {
             return;
         }
         items.add(createStack(this, getMaxTorchCount()));
@@ -211,17 +210,17 @@ public class TorchBandolierItem extends Item {
         Block torch = getTorchBlock();
         Component blockName = torch != null && !(torch instanceof AirBlock)
                 ? torch.getName()
-                : new TranslatableComponent(key + ".empty");
-        tooltip.add(new TranslatableComponent(key + ".blockPlaced", blockName));
+                : Component.translatable(key + ".empty");
+        tooltip.add(Component.translatable(key + ".blockPlaced", blockName));
 
         if (torch != null) {
             int torches = getTorchCount(stack);
             int maxTorches = getMaxTorchCount(stack);
-            tooltip.add(new TranslatableComponent(key + ".count", torches, maxTorches));
+            tooltip.add(Component.translatable(key + ".count", torches, maxTorches));
             boolean autoFill = isAutoFillOn(stack);
-            tooltip.add(new TranslatableComponent(key + ".autoFill." + (autoFill ? "on" : "off")));
+            tooltip.add(Component.translatable(key + ".autoFill." + (autoFill ? "on" : "off")));
         } else {
-            tooltip.add(new TranslatableComponent(key + ".emptyHint").withStyle(ChatFormatting.ITALIC));
+            tooltip.add(Component.translatable(key + ".emptyHint").withStyle(ChatFormatting.ITALIC));
         }
     }
 

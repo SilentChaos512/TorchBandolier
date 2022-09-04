@@ -2,7 +2,7 @@ package net.silentchaos512.torchbandolier.compat.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.VanillaRecipeCategoryUid;
+import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +17,6 @@ import net.silentchaos512.torchbandolier.init.ModItems;
 import net.silentchaos512.torchbandolier.item.TorchBandolierItem;
 
 import javax.annotation.Nonnull;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @JeiPlugin
@@ -33,13 +32,13 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         // Set torch recipes
-        registration.addRecipes(
+        registration.addRecipes(RecipeTypes.CRAFTING,
                 ModItems.getTorchBandoliers()
                         .filter(item -> item.getTorchBlock() != null)
                         .map(item -> {
                             Item torch = item.getTorchBlock().asItem();
                             return new ShapelessRecipe(
-                                    TorchBandolier.getId("dummy_set_" + NameUtils.from(item).getPath()),
+                                    TorchBandolier.getId("dummy_set_" + NameUtils.fromItem(item).getPath()),
                                     "",
                                     TorchBandolierItem.createStack(item, 1),
                                     NonNullList.of(
@@ -49,17 +48,16 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
                                     )
                             );
                         })
-                        .collect(Collectors.toList()),
-                VanillaRecipeCategoryUid.CRAFTING
+                        .collect(Collectors.toList())
         );
         // Extract torches recipes
-        registration.addRecipes(
+        registration.addRecipes(RecipeTypes.CRAFTING,
                 ModItems.getTorchBandoliers()
                         .filter(item -> item.getTorchBlock() != null && !item.getTorchBlock().defaultBlockState().isAir())
                         .map(item -> {
                             Item torch = item.getTorchBlock().asItem();
                             return new ShapelessRecipe(
-                                    TorchBandolier.getId("dummy_extract_" + Objects.requireNonNull(item.getRegistryName()).getPath()),
+                                    TorchBandolier.getId("dummy_extract_" + NameUtils.fromItem(item).getPath()),
                                     "",
                                     new ItemStack(torch, 64),
                                     NonNullList.of(
@@ -68,8 +66,7 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
                                     )
                             );
                         })
-                        .collect(Collectors.toList()),
-                VanillaRecipeCategoryUid.CRAFTING
+                        .collect(Collectors.toList())
         );
     }
 }
