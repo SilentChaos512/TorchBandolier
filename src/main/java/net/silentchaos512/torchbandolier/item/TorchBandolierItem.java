@@ -2,7 +2,6 @@ package net.silentchaos512.torchbandolier.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -11,7 +10,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -21,7 +19,6 @@ import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
 import net.silentchaos512.lib.item.FakeItemUseContext;
 import net.silentchaos512.lib.util.PlayerUtils;
-import net.silentchaos512.torchbandolier.TorchBandolier;
 import net.silentchaos512.torchbandolier.config.Config;
 import net.silentchaos512.torchbandolier.init.ModItems;
 import net.silentchaos512.utils.Lazy;
@@ -63,7 +60,6 @@ public class TorchBandolierItem extends Item {
         super(new Properties()
                 .stacksTo(1)
                 .setNoRepair()
-                .tab(TorchBandolier.ITEM_GROUP)
         );
         this.torchBlock = Lazy.of(torchBlock);
     }
@@ -84,6 +80,10 @@ public class TorchBandolierItem extends Item {
         setTorchCount(result, torchCount);
         setAutoFill(result, true);
         return result;
+    }
+
+    public ItemStack createFullStack() {
+        return createStack(this, getMaxTorchCount());
     }
 
     @Override
@@ -194,14 +194,6 @@ public class TorchBandolierItem extends Item {
         }
 
         return -1;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
-        if (!allowedIn(tab) || getTorchBlock() instanceof AirBlock) {
-            return;
-        }
-        items.add(createStack(this, getMaxTorchCount()));
     }
 
     @Override

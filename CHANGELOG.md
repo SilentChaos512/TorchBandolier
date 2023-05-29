@@ -1,3 +1,9 @@
+## [1.19.3-1.9.0] - 2023-05-29
+- Updated to Minecraft 1.19.3
+
+## [1.9.0]
+- Updated to Minecraft 1.19.2
+
 ## [1.8.0] - 2022-04-19
 - Updated to Minecraft 1.18.2
 

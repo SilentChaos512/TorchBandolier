@@ -8,6 +8,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.silentchaos512.lib.util.NameUtils;
@@ -40,6 +41,7 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
                             return new ShapelessRecipe(
                                     TorchBandolier.getId("dummy_set_" + NameUtils.fromItem(item).getPath()),
                                     "",
+                                    CraftingBookCategory.MISC,
                                     TorchBandolierItem.createStack(item, 1),
                                     NonNullList.of(
                                             Ingredient.EMPTY,
@@ -59,6 +61,7 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
                             return new ShapelessRecipe(
                                     TorchBandolier.getId("dummy_extract_" + NameUtils.fromItem(item).getPath()),
                                     "",
+                                    CraftingBookCategory.MISC,
                                     new ItemStack(torch, 64),
                                     NonNullList.of(
                                             Ingredient.EMPTY,

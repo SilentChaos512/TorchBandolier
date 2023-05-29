@@ -1,12 +1,13 @@
 package net.silentchaos512.torchbandolier;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.silentchaos512.torchbandolier.init.ModItems;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,6 +29,16 @@ public class TorchBandolier {
     public TorchBandolier() {
         INSTANCE = this;
         PROXY = DistExecutor.safeRunForDist(() -> SideProxy.Client::new, () -> SideProxy.Server::new);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(TorchBandolier::onBuildContentsOfCreativeTabs);
+    }
+
+    private static void onBuildContentsOfCreativeTabs(CreativeModeTabEvent.BuildContents event) {
+        if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(ModItems.EMPTY_TORCH_BANDOLIER.get());
+            event.accept(ModItems.TORCH_BANDOLIER.get().createFullStack());
+            event.accept(ModItems.SOUL_TORCH_BANDOLIER.get().createFullStack());
+            event.accept(ModItems.STONE_TORCH_BANDOLIER.get().createFullStack());
+        }
     }
 
     public static String getVersion() {
@@ -52,11 +63,4 @@ public class TorchBandolier {
     public static ResourceLocation getId(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
-
-    public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(MOD_ID) {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(ModItems.TORCH_BANDOLIER);
-        }
-    };
 }
