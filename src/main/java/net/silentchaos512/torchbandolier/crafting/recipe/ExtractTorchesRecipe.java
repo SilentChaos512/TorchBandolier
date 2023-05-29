@@ -1,6 +1,7 @@
 package net.silentchaos512.torchbandolier.crafting.recipe;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -36,7 +37,7 @@ public final class ExtractTorchesRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv) {
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
         ItemStack stack = StackList.from(inv).uniqueOfType(TorchBandolierItem.class);
         TorchBandolierItem item = (TorchBandolierItem) stack.getItem();
         Block block = item.getTorchBlock();
@@ -55,7 +56,7 @@ public final class ExtractTorchesRecipe extends CustomRecipe {
             ItemStack item = inv.getItem(i);
             if (item.getItem() instanceof TorchBandolierItem) {
                 // Extract torches, but leave the modified bandolier in the crafting grid
-                ItemStack torches = assemble(inv);
+                ItemStack torches = assemble(inv, null);
                 int newTorchCount = TorchBandolierItem.getTorchCount(item) - torches.getCount();
                 ItemStack newBandolier;
                 if (newTorchCount > 0) {

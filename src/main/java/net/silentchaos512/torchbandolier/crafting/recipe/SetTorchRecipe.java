@@ -1,5 +1,6 @@
 package net.silentchaos512.torchbandolier.crafting.recipe;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +35,7 @@ public final class SetTorchRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv) {
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
         ItemStack torch = StackList.from(inv).uniqueMatch(s -> !(s.getItem() instanceof TorchBandolierItem));
         TorchBandolierItem item = ModItems.getTorchBandolier(torch.getItem());
         if (torch.isEmpty() || item == null) {
