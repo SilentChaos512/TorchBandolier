@@ -144,7 +144,7 @@ public class TorchBandolierItem extends Item {
         }
 
         ItemStack stack = playerIn.getItemInHand(handIn);
-        if (!playerIn.level.isClientSide && playerIn.isCrouching()) {
+        if (!playerIn.level().isClientSide && playerIn.isCrouching()) {
             // Toggle auto-fill
             boolean mode = !isAutoFillOn(stack);
             setAutoFill(stack, mode);

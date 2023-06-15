@@ -2,7 +2,7 @@ package net.silentchaos512.torchbandolier;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
@@ -32,8 +32,8 @@ public class TorchBandolier {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(TorchBandolier::onBuildContentsOfCreativeTabs);
     }
 
-    private static void onBuildContentsOfCreativeTabs(CreativeModeTabEvent.BuildContents event) {
-        if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+    private static void onBuildContentsOfCreativeTabs(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ModItems.EMPTY_TORCH_BANDOLIER.get());
             event.accept(ModItems.TORCH_BANDOLIER.get().createFullStack());
             event.accept(ModItems.SOUL_TORCH_BANDOLIER.get().createFullStack());

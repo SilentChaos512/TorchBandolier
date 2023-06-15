@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.+', changing: true
     }
 }
 
@@ -49,6 +49,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
     mappings channel: 'official', version: mc_version
+    copyIdeResources = true
 
     runs {
         client = {
@@ -97,11 +98,13 @@ dependencies {
     }
 
     // JEI
-    // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    // at runtime, use the full JEI jar for Forge
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    if (project.hasProperty('jei_version')) {
+        // compile against the JEI API but do not include it at runtime
+        compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+        compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+        // at runtime, use the full JEI jar for Forge
+        runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    }
 }
 
 jar {
@@ -117,12 +120,12 @@ jar {
 }
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier = 'sources'
     from sourceSets.main.allJava
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    archiveClassifier = 'javadoc'
     from javadoc.getDestinationDir()
 }
 
