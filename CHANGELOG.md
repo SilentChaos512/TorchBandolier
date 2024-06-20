@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.20.4-1.10.1] - 2024-06-19
+- Updated to Minecraft 1.20.4
+
 ## [1.20.1-1.10.0] - 2023-06-14
 - Updated to Minecraft 1.20.1
 

@@ -6,16 +6,13 @@ import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.torchbandolier.TorchBandolier;
-import net.silentchaos512.torchbandolier.config.Config;
-import net.silentchaos512.torchbandolier.init.ModItems;
+import net.silentchaos512.torchbandolier.Config;
 import net.silentchaos512.torchbandolier.item.TorchBandolierItem;
+import net.silentchaos512.torchbandolier.setup.ModItems;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Collectors;
@@ -35,20 +32,21 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
         // Set torch recipes
         registration.addRecipes(RecipeTypes.CRAFTING,
                 ModItems.getTorchBandoliers()
-                        .filter(item -> item.getTorchBlock() != null)
-                        .map(item -> {
-                            Item torch = item.getTorchBlock().asItem();
-                            return new ShapelessRecipe(
-                                    TorchBandolier.getId("dummy_set_" + NameUtils.fromItem(item).getPath()),
+                        .filter(item1 -> item1.getTorchBlock() != null)
+                        .map(item1 -> {
+                            var torch1 = item1.getTorchBlock().asItem();
+                            var id1 = TorchBandolier.getId("dummy_set_" + NameUtils.fromItem(item1).getPath());
+                            CraftingRecipe recipe1 = new ShapelessRecipe(
                                     "",
                                     CraftingBookCategory.MISC,
-                                    TorchBandolierItem.createStack(item, 1),
+                                    TorchBandolierItem.createStack(item1, 1),
                                     NonNullList.of(
                                             Ingredient.EMPTY,
                                             Ingredient.of(ModItems.EMPTY_TORCH_BANDOLIER),
-                                            Ingredient.of(torch)
+                                            Ingredient.of(torch1)
                                     )
                             );
+                            return new RecipeHolder<>(id1, recipe1);
                         })
                         .collect(Collectors.toList())
         );
@@ -57,17 +55,18 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
                 ModItems.getTorchBandoliers()
                         .filter(item -> item.getTorchBlock() != null && !item.getTorchBlock().defaultBlockState().isAir())
                         .map(item -> {
-                            Item torch = item.getTorchBlock().asItem();
-                            return new ShapelessRecipe(
-                                    TorchBandolier.getId("dummy_extract_" + NameUtils.fromItem(item).getPath()),
+                            var torch = item.getTorchBlock().asItem();
+                            var id = TorchBandolier.getId("dummy_extract_" + NameUtils.fromItem(item).getPath());
+                            CraftingRecipe recipe = new ShapelessRecipe(
                                     "",
                                     CraftingBookCategory.MISC,
                                     new ItemStack(torch, 64),
                                     NonNullList.of(
                                             Ingredient.EMPTY,
-                                            Ingredient.of(TorchBandolierItem.createStack(item, Config.GENERAL.maxTorchCount.get()))
+                                            Ingredient.of(TorchBandolierItem.createStack(item, Config.maxTorchCount))
                                     )
                             );
+                            return new RecipeHolder<>(id, recipe);
                         })
                         .collect(Collectors.toList())
         );

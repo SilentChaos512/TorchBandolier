@@ -17,11 +17,11 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.util.Lazy;
 import net.silentchaos512.lib.item.FakeItemUseContext;
 import net.silentchaos512.lib.util.PlayerUtils;
-import net.silentchaos512.torchbandolier.config.Config;
-import net.silentchaos512.torchbandolier.init.ModItems;
-import net.silentchaos512.utils.Lazy;
+import net.silentchaos512.torchbandolier.Config;
+import net.silentchaos512.torchbandolier.setup.ModItems;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -53,8 +53,7 @@ public class TorchBandolierItem extends Item {
      * Constructor for cases in which the existence of the torch block is questionable. It may come
      * from an optional mod, or may just not exist yet.
      *
-     * @param torchBlock The torch supplier, typically involves calling {@code getValue} on {@link
-     *                   net.minecraftforge.registries.ForgeRegistries#BLOCKS}.
+     * @param torchBlock The torch block supplier
      */
     public TorchBandolierItem(Supplier<Block> torchBlock) {
         super(new Properties()
@@ -178,7 +177,7 @@ public class TorchBandolierItem extends Item {
         }
 
         if (getTorchCount(stack) == 0 && player != null) {
-            player.getInventory().setItem(getItemSlot(player, stack), new ItemStack(ModItems.EMPTY_TORCH_BANDOLIER));
+            player.getInventory().setItem(getItemSlot(player, stack), ModItems.EMPTY_TORCH_BANDOLIER.toStack());
         }
 
         return result;
@@ -252,7 +251,7 @@ public class TorchBandolierItem extends Item {
     }
 
     public static int getMaxTorchCount() {
-        return Config.GENERAL.maxTorchCount.get();
+        return Config.maxTorchCount;
     }
 
     public static int getMaxTorchCount(ItemStack stack) {

@@ -1,36 +1,26 @@
 modLoader="javafml"
-loaderVersion="[46,)"
-license="MIT"
-issueTrackerURL="https://github.com/SilentChaos512/TorchBandolier/issues"
-displayURL="https://minecraft.curseforge.com/projects/torch-bandolier"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="${issue_tracker_url}"
+displayURL="${display_url}"
 logoFile="logo.png"
-#credits="Thanks for this example mod goes to Java"
-authors="SilentChaos512"
 
 [[mods]]
-    modId="torchbandolier"
-    version="${file.jarVersion}"
-    displayName="Torch Bandolier"
-    #updateJSONURL="http://myurl.me/"
-    description='''
-    Adds an item which stores many torches.
-    '''
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
 
-[[dependencies.torchbandolier]]
-    modId="forge"
-    mandatory=true
-    versionRange="[46,)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.torchbandolier]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.20,1.21)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.torchbandolier]]
-    modId="silentlib"
-    mandatory=true
-    versionRange="[8,9)"
-    ordering="NONE"
-    side="BOTH"
+[[dependencies.${mod_id}]]
+modId="neoforge"
+type="required"
+versionRange="${neo_version_range}"
+ordering="NONE"
+side="BOTH"
+[[dependencies.${mod_id}]]
+modId="minecraft"
+type="required"
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"

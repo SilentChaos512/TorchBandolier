@@ -1,7 +1,6 @@
 package net.silentchaos512.torchbandolier.crafting.recipe;
 
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -9,13 +8,13 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.silentchaos512.lib.collection.StackList;
-import net.silentchaos512.torchbandolier.init.ModItems;
-import net.silentchaos512.torchbandolier.init.ModRecipes;
+import net.silentchaos512.torchbandolier.setup.ModItems;
+import net.silentchaos512.torchbandolier.setup.ModRecipes;
 import net.silentchaos512.torchbandolier.item.TorchBandolierItem;
 
 public final class SetTorchRecipe extends CustomRecipe {
-    public SetTorchRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public SetTorchRecipe(CraftingBookCategory category) {
+        super(category);
     }
 
     @Override

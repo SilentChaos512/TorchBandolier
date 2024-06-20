@@ -1,14 +1,12 @@
-package net.silentchaos512.torchbandolier.init;
+package net.silentchaos512.torchbandolier.setup;
 
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraftforge.fml.common.Mod;
-import net.silentchaos512.torchbandolier.TorchBandolier;
 
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid = TorchBandolier.MOD_ID)
+//@Mod.EventBusSubscriber(modid = TorchBandolier.MOD_ID)
 public final class ModLoot {
     private static final Set<ResourceLocation> ADD_BANDOLIER_TO = ImmutableSet.of(
             BuiltInLootTables.ABANDONED_MINESHAFT,

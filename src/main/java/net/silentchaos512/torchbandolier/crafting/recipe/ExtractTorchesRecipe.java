@@ -2,7 +2,6 @@ package net.silentchaos512.torchbandolier.crafting.recipe;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -11,13 +10,14 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.silentchaos512.lib.collection.StackList;
-import net.silentchaos512.torchbandolier.init.ModItems;
-import net.silentchaos512.torchbandolier.init.ModRecipes;
+import net.silentchaos512.torchbandolier.setup.ModItems;
+import net.silentchaos512.torchbandolier.setup.ModRecipes;
 import net.silentchaos512.torchbandolier.item.TorchBandolierItem;
+import org.jetbrains.annotations.NotNull;
 
 public final class ExtractTorchesRecipe extends CustomRecipe {
-    public ExtractTorchesRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, category);
+    public ExtractTorchesRecipe(CraftingBookCategory category) {
+        super(category);
     }
 
     @Override
@@ -36,16 +36,22 @@ public final class ExtractTorchesRecipe extends CustomRecipe {
         return !stack.isEmpty();
     }
 
-    @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+    private static @NotNull ItemStack getResult(CraftingContainer inv) {
         ItemStack stack = StackList.from(inv).uniqueOfType(TorchBandolierItem.class);
         TorchBandolierItem item = (TorchBandolierItem) stack.getItem();
         Block block = item.getTorchBlock();
+        if (block == null) {
+            return ItemStack.EMPTY;
+        }
         int torchCount = TorchBandolierItem.getTorchCount(stack);
         int extractCount = Math.min(torchCount, 64);
         return new ItemStack(block, extractCount);
     }
 
+    @Override
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+        return getResult(inv);
+    }
 
 
     @Override
@@ -56,7 +62,7 @@ public final class ExtractTorchesRecipe extends CustomRecipe {
             ItemStack item = inv.getItem(i);
             if (item.getItem() instanceof TorchBandolierItem) {
                 // Extract torches, but leave the modified bandolier in the crafting grid
-                ItemStack torches = assemble(inv, null);
+                ItemStack torches = getResult(inv);
                 int newTorchCount = TorchBandolierItem.getTorchCount(item) - torches.getCount();
                 ItemStack newBandolier;
                 if (newTorchCount > 0) {
@@ -64,7 +70,7 @@ public final class ExtractTorchesRecipe extends CustomRecipe {
                     TorchBandolierItem.setTorchCount(newBandolier, newTorchCount);
                     TorchBandolierItem.setAutoFill(newBandolier, false);
                 } else {
-                    newBandolier = new ItemStack(ModItems.EMPTY_TORCH_BANDOLIER);
+                    newBandolier = ModItems.EMPTY_TORCH_BANDOLIER.toStack();
                 }
                 list.set(i, newBandolier);
             }
