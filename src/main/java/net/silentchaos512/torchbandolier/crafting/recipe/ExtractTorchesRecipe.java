@@ -5,6 +5,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -27,10 +28,10 @@ public final class ExtractTorchesRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level worldIn) {
+    public boolean matches(CraftingInput inv, Level worldIn) {
         ItemStack torchBandolier = ItemStack.EMPTY;
 
-        for (int i = 0; i < inv.getContainerSize(); ++i) {
+        for (int i = 0; i < inv.size(); ++i) {
             var stackInSlot = inv.getItem(i);
             if (stackInSlot.isEmpty()) {
                 continue;
@@ -45,7 +46,7 @@ public final class ExtractTorchesRecipe extends CustomRecipe {
         return !torchBandolier.isEmpty();
     }
 
-    private static @NotNull ItemStack getResult(CraftingContainer inv) {
+    private static @NotNull ItemStack getResult(CraftingInput inv) {
         ItemStack stack = StackList.from(inv).uniqueOfType(TorchBandolierItem.class);
         TorchBandolierItem item = (TorchBandolierItem) stack.getItem();
         Block block = item.getTorchBlock(stack);
@@ -58,13 +59,13 @@ public final class ExtractTorchesRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, HolderLookup.Provider registryAccess) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registryAccess) {
         return getResult(inv);
     }
 
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
-        NonNullList<ItemStack> list = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput inv) {
+        NonNullList<ItemStack> list = NonNullList.withSize(inv.size(), ItemStack.EMPTY);
 
         for(int i = 0; i < list.size(); ++i) {
             ItemStack item = inv.getItem(i);

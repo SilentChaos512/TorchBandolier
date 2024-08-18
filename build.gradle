@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.142'
+    id 'net.neoforged.gradle.userdev' version '7.0.145'
     id "com.matthewprenger.cursegradle" version "1.4.0"
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -104,6 +104,10 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
 }
 
 dependencies {
@@ -117,7 +121,13 @@ dependencies {
         compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
         compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
         // at runtime, use the full JEI jar for NeoForge
-        runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+        //runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+    }
+
+    // EMI
+    if (project.hasProperty("emi_version")) {
+        compileOnly("dev.emi:emi-neoforge:${emi_version}:api")
+        runtimeOnly("dev.emi:emi-neoforge:${emi_version}")
     }
 }
 

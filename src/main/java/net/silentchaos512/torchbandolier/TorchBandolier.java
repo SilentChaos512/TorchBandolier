@@ -44,6 +44,6 @@ public class TorchBandolier {
     }
 
     public static ResourceLocation getId(String path) {
-        return new ResourceLocation(MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 }
