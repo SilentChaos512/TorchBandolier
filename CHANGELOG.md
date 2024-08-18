@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.20.6-1.11.0] - 2024-08-18
+- Updated to Minecraft 1.20.6 (NeoForge)
+
 ## [1.20.4-1.10.1] - 2024-06-19
 - Updated to Minecraft 1.20.4
 

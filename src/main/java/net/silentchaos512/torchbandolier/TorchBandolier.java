@@ -3,12 +3,13 @@ package net.silentchaos512.torchbandolier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.silentchaos512.torchbandolier.setup.ModDataComponents;
 import net.silentchaos512.torchbandolier.setup.ModItems;
-import net.silentchaos512.torchbandolier.setup.Registration;
+import net.silentchaos512.torchbandolier.setup.ModRecipes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,11 +23,15 @@ public class TorchBandolier {
 
     public static TorchBandolier INSTANCE;
 
-    public TorchBandolier(IEventBus modEventBus) {
+    public TorchBandolier(IEventBus modEventBus, ModContainer modContainer) {
         INSTANCE = this;
-        Registration.register(modEventBus);
+
         modEventBus.addListener(TorchBandolier::onBuildContentsOfCreativeTabs);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        ModDataComponents.REGISTRAR.register(modEventBus);
+        ModItems.ITEMS.register(modEventBus);
+        ModRecipes.RECIPE_SERIALIZERS.register(modEventBus);
     }
 
     private static void onBuildContentsOfCreativeTabs(BuildCreativeModeTabContentsEvent event) {

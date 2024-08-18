@@ -2,8 +2,8 @@ package net.silentchaos512.torchbandolier.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -17,72 +17,68 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.util.Lazy;
 import net.silentchaos512.lib.item.FakeItemUseContext;
 import net.silentchaos512.lib.util.PlayerUtils;
 import net.silentchaos512.torchbandolier.Config;
+import net.silentchaos512.torchbandolier.setup.ModDataComponents;
 import net.silentchaos512.torchbandolier.setup.ModItems;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TorchBandolierItem extends Item {
-    private static final String NBT_ROOT = "TorchBandolier";
-    private static final String NBT_AUTO_FILL = "AutoFill";
-    private static final String NBT_COUNT = "Count";
-
     private static final int ABSORB_DELAY = 20;
 
-    private final Lazy<Block> torchBlock;
+    private final Supplier<Block> torchBlock;
+    private final TagKey<Item> acceptedTorches;
 
-    /**
-     * Use if {@code torchBlock} already exists. If the torch may not yet exist, or may not exist at
-     * all, use {@link TorchBandolierItem#TorchBandolierItem(Supplier)}.
-     *
-     * @param torchBlock The torch to store and place
-     */
-    public TorchBandolierItem(@Nullable Block torchBlock) {
-        this(() -> torchBlock);
-    }
-
-    /**
-     * Constructor for cases in which the existence of the torch block is questionable. It may come
-     * from an optional mod, or may just not exist yet.
-     *
-     * @param torchBlock The torch block supplier
-     */
-    public TorchBandolierItem(Supplier<Block> torchBlock) {
+    public TorchBandolierItem(Supplier<Block> torchBlockSupplier, TagKey<Item> acceptedTorches) {
         super(new Properties()
                 .stacksTo(1)
                 .setNoRepair()
         );
-        this.torchBlock = Lazy.of(torchBlock);
+        this.torchBlock = torchBlockSupplier;
+        this.acceptedTorches = acceptedTorches;
     }
 
-    /**
-     * Gets the torch this bandolier places. Could be null (empty bandolier) or air (bandolier with
-     * an invalid torch).
-     *
-     * @return The torch block placed
-     */
+    public TagKey<Item> getAcceptedTorches() {
+        return this.acceptedTorches;
+    }
+
     @Nullable
-    public Block getTorchBlock() {
+    public Block getDefaultTorchBlock() {
         return torchBlock.get();
     }
 
-    public static ItemStack createStack(TorchBandolierItem item, int torchCount) {
+    public static ItemStack createStack(TorchBandolierItem item, Block torch, int torchCount) {
         ItemStack result = new ItemStack(item);
+        setTorchBlock(result, torch);
         setTorchCount(result, torchCount);
         setAutoFill(result, true);
         return result;
     }
 
+    public static ItemStack createCopyWithNewCount(ItemStack stack, int newTorchCount, boolean autoFill) {
+        if (stack.getItem() instanceof TorchBandolierItem torchBandolierItem) {
+            ItemStack result = new ItemStack(stack.getItem());
+            setTorchBlock(result, Objects.requireNonNull(torchBandolierItem.getTorchBlock(stack)));
+            setTorchCount(result, newTorchCount);
+            setAutoFill(result, autoFill);
+            return result;
+        }
+        throw new IllegalArgumentException("Item is not a torch bandolier: " + stack);
+    }
+
     public ItemStack createFullStack() {
-        return createStack(this, getMaxTorchCount());
+        if (this.getDefaultTorchBlock() != null) {
+            return createStack(this, this.getDefaultTorchBlock(), getMaxTorchCount());
+        }
+        return new ItemStack(this);
     }
 
     @Override
@@ -95,7 +91,7 @@ public class TorchBandolierItem extends Item {
 
     private void absorbTorches(ItemStack stack, Player player) {
         int maxTorches = getMaxTorchCount(stack);
-        Block torch = getTorchBlock();
+        Block torch = getTorchBlock(stack);
         if (torch == null || torch instanceof AirBlock || getTorchCount(stack) >= maxTorches) {
             return;
         }
@@ -137,12 +133,12 @@ public class TorchBandolierItem extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
-        Block torch = getTorchBlock();
+        ItemStack stack = playerIn.getItemInHand(handIn);
+        Block torch = getTorchBlock(stack);
         if (torch == null || torch instanceof AirBlock) {
             return super.use(worldIn, playerIn, handIn);
         }
 
-        ItemStack stack = playerIn.getItemInHand(handIn);
         if (!playerIn.level().isClientSide && playerIn.isCrouching()) {
             // Toggle auto-fill
             boolean mode = !isAutoFillOn(stack);
@@ -155,12 +151,12 @@ public class TorchBandolierItem extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        Block torch = getTorchBlock();
+        ItemStack stack = context.getItemInHand();
+        Block torch = getTorchBlock(stack);
         if (torch == null || torch instanceof AirBlock) {
             return InteractionResult.PASS;
         }
 
-        ItemStack stack = context.getItemInHand();
         Player player = context.getPlayer();
         boolean consumeTorch = player == null || !player.getAbilities().instabuild;
         if (getTorchCount(stack) <= 0 && consumeTorch) {
@@ -196,9 +192,9 @@ public class TorchBandolierItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag flagIn) {
         String key = "item.torchbandolier.torch_bandolier";
-        Block torch = getTorchBlock();
+        Block torch = getTorchBlock(stack);
         Component blockName = torch != null && !(torch instanceof AirBlock)
                 ? torch.getName()
                 : Component.translatable(key + ".empty");
@@ -222,7 +218,7 @@ public class TorchBandolierItem extends Item {
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        return getTorchBlock() != null;
+        return getTorchBlock(stack) != null;
     }
 
     @Override
@@ -238,16 +234,22 @@ public class TorchBandolierItem extends Item {
         return Mth.hsvToRgb(f / 3.0F, 1.0F, 1.0F);
     }
 
-    private static CompoundTag getData(ItemStack stack) {
-        return stack.getOrCreateTagElement(NBT_ROOT);
+    @Nullable
+    public Block getTorchBlock(ItemStack stack) {
+        var block = stack.get(ModDataComponents.TORCH);
+        return block != null ? block : this.getDefaultTorchBlock();
+    }
+
+    public static void setTorchBlock(ItemStack stack, Block torch) {
+        stack.set(ModDataComponents.TORCH, torch);
     }
 
     public static int getTorchCount(ItemStack stack) {
-        return getData(stack).getInt(NBT_COUNT);
+        return stack.getOrDefault(ModDataComponents.TORCH_COUNT, 0);
     }
 
     public static void setTorchCount(ItemStack stack, int value) {
-        getData(stack).putInt(NBT_COUNT, value);
+        stack.set(ModDataComponents.TORCH_COUNT, value);
     }
 
     public static int getMaxTorchCount() {
@@ -259,10 +261,10 @@ public class TorchBandolierItem extends Item {
     }
 
     public static boolean isAutoFillOn(ItemStack stack) {
-        return getData(stack).getBoolean(NBT_AUTO_FILL);
+        return stack.getOrDefault(ModDataComponents.AUTOFILL, true);
     }
 
     public static void setAutoFill(ItemStack stack, boolean value) {
-        getData(stack).putBoolean(NBT_AUTO_FILL, value);
+        stack.set(ModDataComponents.AUTOFILL, value);
     }
 }

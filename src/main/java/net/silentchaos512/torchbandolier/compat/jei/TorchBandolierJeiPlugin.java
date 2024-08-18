@@ -8,6 +8,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.block.Block;
 import net.silentchaos512.lib.util.NameUtils;
 import net.silentchaos512.torchbandolier.TorchBandolier;
 import net.silentchaos512.torchbandolier.Config;
@@ -32,18 +33,19 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
         // Set torch recipes
         registration.addRecipes(RecipeTypes.CRAFTING,
                 ModItems.getTorchBandoliers()
-                        .filter(item1 -> item1.getTorchBlock() != null)
+                        .filter(item1 -> item1.getDefaultTorchBlock() != null)
                         .map(item1 -> {
-                            var torch1 = item1.getTorchBlock().asItem();
+                            var defaultTorchBlock = item1.getDefaultTorchBlock();
+                            var torchItem = defaultTorchBlock.asItem();
                             var id1 = TorchBandolier.getId("dummy_set_" + NameUtils.fromItem(item1).getPath());
                             CraftingRecipe recipe1 = new ShapelessRecipe(
                                     "",
                                     CraftingBookCategory.MISC,
-                                    TorchBandolierItem.createStack(item1, 1),
+                                    TorchBandolierItem.createStack(item1, defaultTorchBlock, 1),
                                     NonNullList.of(
                                             Ingredient.EMPTY,
                                             Ingredient.of(ModItems.EMPTY_TORCH_BANDOLIER),
-                                            Ingredient.of(torch1)
+                                            Ingredient.of(torchItem)
                                     )
                             );
                             return new RecipeHolder<>(id1, recipe1);
@@ -53,17 +55,18 @@ public class TorchBandolierJeiPlugin implements IModPlugin {
         // Extract torches recipes
         registration.addRecipes(RecipeTypes.CRAFTING,
                 ModItems.getTorchBandoliers()
-                        .filter(item -> item.getTorchBlock() != null && !item.getTorchBlock().defaultBlockState().isAir())
+                        .filter(item -> item.getDefaultTorchBlock() != null && !item.getDefaultTorchBlock().defaultBlockState().isAir())
                         .map(item -> {
-                            var torch = item.getTorchBlock().asItem();
+                            var defaultTorchBlock = item.getDefaultTorchBlock();
+                            var torchItem = defaultTorchBlock.asItem();
                             var id = TorchBandolier.getId("dummy_extract_" + NameUtils.fromItem(item).getPath());
                             CraftingRecipe recipe = new ShapelessRecipe(
                                     "",
                                     CraftingBookCategory.MISC,
-                                    new ItemStack(torch, 64),
+                                    new ItemStack(torchItem, 64),
                                     NonNullList.of(
                                             Ingredient.EMPTY,
-                                            Ingredient.of(TorchBandolierItem.createStack(item, Config.maxTorchCount))
+                                            Ingredient.of(TorchBandolierItem.createStack(item, defaultTorchBlock, Config.maxTorchCount))
                                     )
                             );
                             return new RecipeHolder<>(id, recipe);

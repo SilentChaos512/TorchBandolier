@@ -1,5 +1,6 @@
 {
-  "type": "crafting_shaped",
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "pattern": [
     "###",
     "/o/",
@@ -7,16 +8,17 @@
   ],
   "key": {
     "#": {
-      "tag": "forge:leather"
+      "tag": "c:leathers"
     },
     "/": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     },
     "o": {
-      "tag": "forge:gems/diamond"
+      "tag": "c:gems/diamond"
     }
   },
   "result": {
-    "item": "torchbandolier:empty_torch_bandolier"
+    "count": 1,
+    "id": "torchbandolier:empty_torch_bandolier"
   }
 }

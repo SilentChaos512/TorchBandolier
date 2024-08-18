@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+        {
+            "id": "silentgear:stone_torch",
+            "required": false
+        }
+    ]
+}
