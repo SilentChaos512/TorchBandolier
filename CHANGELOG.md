@@ -1,7 +1,16 @@
 # Changelog
 
+## [1.21-1.12.0] - 2024-08-18
+- Updated to Minecraft 1.21
+- Add EMI support
+
 ## [1.20.6-1.11.0] - 2024-08-18
 - Updated to Minecraft 1.20.6 (NeoForge)
+- Added three data components for torch bandoliers
+  - `torchbandolier:torch` - The block that is placed
+  - `torchbandolier:torch_count` - The number of blocks stored
+  - `torchbandolier:autofill` - The autofill mode (true/false)
+- Added tags for the torches the different torch bandolier items will accept during crafting
 
 ## [1.20.4-1.10.1] - 2024-06-19
 - Updated to Minecraft 1.20.4
